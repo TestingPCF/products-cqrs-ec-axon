@@ -9,9 +9,9 @@ import java.util.Date;
 public class ErrorDetails {
 	private Date timestamp;
 	private String message;
-	private int errorCode;
+	private String errorCode;
 
-	public ErrorDetails(Date timestamp, String message, int errorCode) {
+	public ErrorDetails(Date timestamp, String message, String errorCode) {
 		super();
 		this.timestamp = timestamp;
 		this.message = message;
@@ -34,11 +34,11 @@ public class ErrorDetails {
 		this.message = message;
 	}
 
-	public int getErrorCode() {
+	public String getErrorCode() {
 		return errorCode;
 	}
 
-	public void setErrorCode(int errorCode) {
+	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
 	}
 }

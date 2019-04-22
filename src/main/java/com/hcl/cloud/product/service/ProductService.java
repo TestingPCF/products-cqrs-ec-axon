@@ -8,6 +8,7 @@ import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
+import com.hcl.cloud.product.resources.TransactionBean;
 
 /**
  * 
@@ -24,7 +25,7 @@ public interface ProductService {
 	 * @return
 	 * @throws ProductException
 	 */
-	public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env) throws ProductException;
+	public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean) throws ProductException;
 
 	/**
 	 * This method implementation works for delete product.

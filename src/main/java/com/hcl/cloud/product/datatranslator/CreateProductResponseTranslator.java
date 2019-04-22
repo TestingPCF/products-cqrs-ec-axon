@@ -6,8 +6,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
+import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.response.CreateproductRes;
+import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 
 /**
  * 
@@ -24,17 +26,18 @@ public class CreateProductResponseTranslator {
 	 * @param env
 	 * @return
 	 */
-	public CreateproductRes createproductresponsetranslator(CreateproductReq createproductReq, Environment env) {
+	public CreateproductRes createproductresponsetranslator(CreateproductReq createproductReq, Environment env)
+			throws ProductException {
 		log.info("Response translation from backend to frontend start");
 		CreateproductRes createproductRes = new CreateproductRes();
 		createproductRes.setSkuCode(createproductReq.getSkuCode());
 		if (!StringUtils.isEmpty(createproductReq.getStatus())
-				&& createproductReq.getStatus().equals(env.getProperty("success"))) {
+				&& createproductReq.getStatus().equals(SUCCESS)) {
 			createproductRes.setStatus(env.getProperty("product.create.successmsg"));
-			createproductRes.setStatusCode(HttpStatus.OK.value());
+			createproductRes.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} else {
 			createproductRes.setStatus(env.getProperty("product.existmsg"));
-			createproductRes.setStatusCode(HttpStatus.NO_CONTENT.value());
+			createproductRes.setStatusCode(String.valueOf(HttpStatus.NO_CONTENT.value()));
 		}
 
 		log.info("Response translation from backend to frontend end");

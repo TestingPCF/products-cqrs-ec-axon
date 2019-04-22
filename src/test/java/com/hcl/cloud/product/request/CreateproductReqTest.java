@@ -26,8 +26,8 @@ public class CreateproductReqTest {
 	    createproductReq.setCategory("Medium");
 	    createproductReq.setIs_deleted(false);
 	    createproductReq.setProductDescrition("better cooling 1.5 ton");
-	    createproductReq.setSalePrice(380000.0);
-	    createproductReq.setListPrice(32000.0);
+	    //createproductReq.setSalePrice(380000.0);
+	    //createproductReq.setListPrice(32000.0);
 	    when(createproductReq.isIs_deleted()==false).thenReturn(true);
 	    assertNotNull(createproductReq);
 		

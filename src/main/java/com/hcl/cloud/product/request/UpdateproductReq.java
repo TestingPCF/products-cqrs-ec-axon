@@ -1,5 +1,8 @@
 package com.hcl.cloud.product.request;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 /**
  * 
@@ -9,22 +12,25 @@ import org.springframework.data.annotation.Id;
 public class UpdateproductReq {
 
 	@Id
+	@NotNull
 	private String skuCode = null;
+	
 	private String productName = null;
-	private Double salePrice = 0.0;
-	private Double listPrice = 0.0;
+	@Min(value=1)
+	private Integer salePrice;
+	@Min(value=1)
+	private Integer listPrice;
 	private String productDescrition = null;
 	private String category = null;
+	private boolean is_deleted = false;
 
-	public UpdateproductReq(String skuCode, String productName, Double salePrice, Double listPrice,
-			String productDescrition, String category) {
-		this.skuCode = skuCode;
-		this.productName = productName;
-		this.listPrice = listPrice;
-		this.salePrice = salePrice;
-		this.productDescrition = productDescrition;
-		this.category = category;
-	}
+	/*
+	 * public UpdateproductReq(String skuCode, String productName, Integer
+	 * salePrice, Integer listPrice, String productDescrition, String category) {
+	 * this.skuCode = skuCode; this.productName = productName; this.listPrice =
+	 * listPrice; this.salePrice = salePrice; this.productDescrition =
+	 * productDescrition; this.category = category; }
+	 */
 
 	public String getSkuCode() {
 		return skuCode;
@@ -42,19 +48,19 @@ public class UpdateproductReq {
 		this.productName = productName;
 	}
 
-	public Double getSalePrice() {
+	public Integer getSalePrice() {
 		return salePrice;
 	}
 
-	public void setSalePrice(Double salePrice) {
+	public void setSalePrice(Integer salePrice) {
 		this.salePrice = salePrice;
 	}
 
-	public Double getListPrice() {
+	public Integer getListPrice() {
 		return listPrice;
 	}
 
-	public void setListPrice(Double listPrice) {
+	public void setListPrice(Integer listPrice) {
 		this.listPrice = listPrice;
 	}
 
@@ -72,6 +78,14 @@ public class UpdateproductReq {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public boolean isIs_deleted() {
+		return is_deleted;
+	}
+
+	public void setIs_deleted(boolean is_deleted) {
+		this.is_deleted = is_deleted;
 	}
 
 }

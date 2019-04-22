@@ -19,7 +19,7 @@ public class CreateproductResTest {
 		CreateproductRes cerRes = Mockito.mock(CreateproductRes.class);
 		cerRes.setSkuCode("ABC_12");
 		cerRes.setStatus("product created successfuly");
-		cerRes.setStatusCode(HttpStatus.OK.value());
+		cerRes.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		assertNotNull("message", cerRes);
 	}
 }

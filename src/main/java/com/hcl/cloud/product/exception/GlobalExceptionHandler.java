@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = Exception.class)
 	public final ResponseEntity<ErrorDetails> handleException(Exception ex) {
 		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
-				HttpStatus.INTERNAL_SERVER_ERROR.value());
+				String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
 		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = ProductException.class)
 	public final ResponseEntity<ErrorDetails> handleException(ProductException ex) {
 		ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getCause().getMessage(),
-				HttpStatus.NOT_FOUND.value());
+				String.valueOf(HttpStatus.NOT_FOUND.value()));
 		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

@@ -2,6 +2,9 @@ package com.hcl.cloud.product.request;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
@@ -9,26 +12,34 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author BrijendraK
  *
  */
+
 @Entity
 public class CreateproductReq {
 
 	@Id
+	@NotNull
 	private String skuCode = null;
+	@NotNull
 	private String productName = null;
-	private Double salePrice = 0.0;
-	private Double listPrice = 0.0;
+	@Min(value=1)
+	@NotNull
+	private Integer salePrice;
+	@Min(value=1)
+	@NotNull
+	private Integer listPrice;
+	@NotNull
 	private String productDescrition = null;
+	@NotNull
 	private String category = null;
-
-	@JsonIgnore
-	private boolean is_deleted = false;
+    private boolean is_deleted = false;
+	@Transient
 	@JsonIgnore
 	private String status = null;
 
 	public CreateproductReq() {
 	}
 
-	public CreateproductReq(String skuCode, String productName, Double listPrice, Double salePrice,
+	public CreateproductReq(String skuCode, String productName, Integer listPrice, Integer salePrice,
 			String productDescrition, String category, boolean is_deleted) {
 		this.skuCode = skuCode;
 		this.productName = productName;
@@ -87,19 +98,19 @@ public class CreateproductReq {
 		this.is_deleted = is_deleted;
 	}
 
-	public Double getSalePrice() {
+	public Integer getSalePrice() {
 		return salePrice;
 	}
-
-	public void setSalePrice(Double salePrice) {
+	
+	public void setSalePrice(Integer salePrice) {
 		this.salePrice = salePrice;
 	}
 
-	public Double getListPrice() {
+	public Integer getListPrice() {
 		return listPrice;
 	}
 
-	public void setListPrice(Double listPrice) {
+	public void setListPrice(Integer listPrice) {
 		this.listPrice = listPrice;
 	}
 

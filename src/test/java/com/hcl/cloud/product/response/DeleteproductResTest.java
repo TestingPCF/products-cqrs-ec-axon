@@ -18,7 +18,7 @@ public class DeleteproductResTest {
 		DeleteproductRes delRes = Mockito.mock(DeleteproductRes.class);
 		delRes.setSkuCode("ABC_12");
 		delRes.setStatus("product deleted successfuly");
-		delRes.setStatusCode(HttpStatus.OK.value());
+		delRes.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		assertNotNull("message", delRes);
 	}
 

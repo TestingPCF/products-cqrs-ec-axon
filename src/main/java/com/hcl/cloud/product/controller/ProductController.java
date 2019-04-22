@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +32,7 @@ import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
+import com.hcl.cloud.product.resources.TransactionBean;
 import com.hcl.cloud.product.response.CreateproductRes;
 import com.hcl.cloud.product.response.DeleteproductRes;
 import com.hcl.cloud.product.response.UpdateproductRes;
@@ -77,16 +77,16 @@ public class ProductController {
 		log.info("createProduct call start");
 		CreateproductRes createproductRes = null;
 		CreateProductResponseTranslator cprtrans = new CreateProductResponseTranslator();
-		if (StringUtils.isEmpty(createproductReq.getSkuCode())) {
-			throw new NullPointerException(env.getProperty("sku.code.empty"));
-		}
+		TransactionBean txBean = new TransactionBean();
+		txBean.setAccessToken(accessToken);
 		try {
 
-			createproductReq = productService.createProduct(createproductReq, env);
+			createproductReq = productService.createProduct(createproductReq, env, txBean);
+			createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);
 		} catch (ProductException ex) {
 			throw ex;
 		}
-		createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);
+
 		log.info("createProduct call end");
 		return ResponseEntity.ok().body(createproductRes);
 	}
@@ -108,16 +108,13 @@ public class ProductController {
 		CreateproductReq createproductReq = null;
 		DeleteproductRes deleteproductRes = null;
 		DeleteProductResponseTranslator dpt = new DeleteProductResponseTranslator();
-		if (StringUtils.isEmpty(deleteproductReq.getSkuCode())) {
-			throw new NullPointerException(env.getProperty("sku.code.empty"));
-		}
-
 		try {
 			createproductReq = productService.deleteProduct(deleteproductReq, env);
+			deleteproductRes = dpt.deleteproductresponseTranslator(createproductReq, env);
 		} catch (ProductException ex) {
 			throw ex;
 		}
-		deleteproductRes = dpt.deleteproductresponseTranslator(createproductReq, env);
+
 		log.info("deleteProduct call end");
 		return ResponseEntity.ok().body(deleteproductRes);
 
@@ -138,17 +135,13 @@ public class ProductController {
 		CreateproductReq createproductReq = null;
 		UpdateproductRes updateproductRes = null;
 		UpdateProductResponseTranslator updateTranslator = new UpdateProductResponseTranslator();
-		if (StringUtils.isEmpty(updateproductReq.getSkuCode())) {
-			throw new NullPointerException(env.getProperty("sku.code.empty"));
-		}
-
 		try {
 			createproductReq = productService.updateProduct(updateproductReq, env);
+			updateproductRes = updateTranslator.updateProductResponseTranslator(createproductReq, env);
 		} catch (Exception ex) {
 			throw ex;
 		}
 
-		updateproductRes = updateTranslator.updateProductResponseTranslator(createproductReq, env);
 		log.info("updateProduct call end");
 		return ResponseEntity.ok().body(updateproductRes);
 
@@ -169,9 +162,13 @@ public class ProductController {
 		log.info("viewProductBySkuCode call start");
 		ViewProductbySkuCodeResponseTranslator vpt = new ViewProductbySkuCodeResponseTranslator();
 		ViewproductRes viewproductRes = null;
-		if (!StringUtils.isEmpty(skuCode)) {
-			List<CreateproductReq> pList = productService.viewproductbyskuCode(skuCode, env);
-			viewproductRes = vpt.viewProductbySkuCodeResponseTranslator(pList, env);
+		try {
+			if (!StringUtils.isEmpty(skuCode)) {
+				List<CreateproductReq> pList = productService.viewproductbyskuCode(skuCode, env);
+				viewproductRes = vpt.viewProductbySkuCodeResponseTranslator(pList, env);
+			}
+		} catch (ProductException ex) {
+			throw ex;
 		}
 		log.info("viewProductBySkuCode call end");
 		return ResponseEntity.ok().body(viewproductRes);

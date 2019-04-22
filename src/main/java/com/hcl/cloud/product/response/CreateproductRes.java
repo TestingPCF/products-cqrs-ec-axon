@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class CreateproductRes {
 
 	private String skuCode = null;
-	private int statusCode;
+	private String statusCode = null;
 	private String status = null;
 
 	public String getSkuCode() {
@@ -22,11 +22,11 @@ public class CreateproductRes {
 		this.skuCode = skuCode;
 	}
 
-	public int getStatusCode() {
+	public String getStatusCode() {
 		return statusCode;
 	}
 
-	public void setStatusCode(int created) {
+	public void setStatusCode(String created) {
 		this.statusCode = created;
 	}
 

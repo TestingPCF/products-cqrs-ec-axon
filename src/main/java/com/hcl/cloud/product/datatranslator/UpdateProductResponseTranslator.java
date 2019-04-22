@@ -8,6 +8,8 @@ import org.springframework.util.StringUtils;
 
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.response.UpdateproductRes;
+import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
+
 
 public class UpdateProductResponseTranslator {
 	static Logger log = LoggerFactory.getLogger(UpdateProductResponseTranslator.class);
@@ -23,12 +25,12 @@ public class UpdateProductResponseTranslator {
 		log.info("Response translation from backend to frontend start");
 		UpdateproductRes updateproductRes = new UpdateproductRes();
 
-		if (!StringUtils.isEmpty(creReq.getStatus()) && creReq.getStatus().equals(env.getProperty("success"))) {
+		if (!StringUtils.isEmpty(creReq.getStatus()) && creReq.getStatus().equals(SUCCESS)) {
 			updateproductRes.setStatus(env.getProperty("product.update.successmsg"));
-			updateproductRes.setStatusCode(HttpStatus.OK.value());
+			updateproductRes.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} else {
 			updateproductRes.setStatus(env.getProperty("product.notexistmsg"));
-			updateproductRes.setStatusCode(HttpStatus.NO_CONTENT.value());
+			updateproductRes.setStatusCode(String.valueOf(HttpStatus.NO_CONTENT.value()));
 		}
 		log.info("Response translation from backend to frontend end");
 		return updateproductRes;

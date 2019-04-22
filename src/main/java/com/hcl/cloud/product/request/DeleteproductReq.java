@@ -1,4 +1,7 @@
 package com.hcl.cloud.product.request;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * 
  * @author BrijendraK
@@ -6,6 +9,7 @@ package com.hcl.cloud.product.request;
  */
 public class DeleteproductReq {
 
+	@NotNull
 	private String skuCode;
 
 	public String getSkuCode() {
