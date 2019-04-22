@@ -36,17 +36,6 @@ public class CreateproductReq {
 	@JsonIgnore
 	private String status = null;
 
-	public CreateproductReq() {
-	}
-
-	/*
-	 * public CreateproductReq(String skuCode, String productName, Integer
-	 * listPrice, Integer salePrice, String productDescrition, String category,
-	 * boolean is_deleted) { this.skuCode = skuCode; this.productName = productName;
-	 * this.listPrice = listPrice; this.salePrice = salePrice;
-	 * this.productDescrition = productDescrition; this.category = category;
-	 * this.is_deleted = is_deleted; }
-	 */
 
 	public String getStatus() {
 		return status;

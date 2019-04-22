@@ -24,14 +24,6 @@ public class UpdateproductReq {
 	private String category = null;
 	private boolean is_deleted = false;
 
-	/*
-	 * public UpdateproductReq(String skuCode, String productName, Integer
-	 * salePrice, Integer listPrice, String productDescrition, String category) {
-	 * this.skuCode = skuCode; this.productName = productName; this.listPrice =
-	 * listPrice; this.salePrice = salePrice; this.productDescrition =
-	 * productDescrition; this.category = category; }
-	 */
-
 	public String getSkuCode() {
 		return skuCode;
 	}
