@@ -73,5 +73,4 @@ public class ProductServiceImplTest {
 		assertEquals("ABC", createproductReq.getSkuCode());
 	}
 
-	
 }
