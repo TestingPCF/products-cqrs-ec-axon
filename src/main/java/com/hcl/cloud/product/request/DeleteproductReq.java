@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class DeleteproductReq {
 
 	@NotNull
-	private String skuCode;
+	private String skuCode = null;
 
 	public String getSkuCode() {
 		return skuCode;
