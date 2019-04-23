@@ -1,7 +1,10 @@
 
 package com.hcl.cloud.product.service.impl;
 
-import java.net.URI;
+import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
+import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
+import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,24 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
-import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
-import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
-import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
-import static com.hcl.cloud.product.constants.ProductConstants.ACCESS_TOKEN;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
-import com.hcl.cloud.product.request.InventoryQuantityReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
 import com.hcl.cloud.product.resources.HystrixCommandPropertyResource;
 import com.hcl.cloud.product.resources.TransactionBean;
@@ -44,13 +37,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository repository;
-	
+
 	public void setRepository(ProductRepository repository) {
 		this.repository = repository;
-	}
-
-	public static void setLog(Logger log) {
-		ProductServiceImpl.log = log;
 	}
 
 	@Autowired
@@ -59,7 +48,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@HystrixCommand(fallbackMethod = "createProductFallback", commandKey = "CREATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
-	public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean) throws ProductException {
+	public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
+			throws ProductException {
 
 		log.info("Product detail insetion DB call Start");
 		try {
@@ -68,20 +58,20 @@ public class ProductServiceImpl implements ProductService {
 
 			if (!product.isPresent()) {
 				createproductReq = repository.save(createproductReq);
-				//inventory call for initial product quantity as 0.
-				/*RestTemplate restTemplate = new RestTemplate();
-				final String url = "http://localhost:443/product";
-				URI uri = new URI(url);
-				HttpHeaders requestHeaders = new HttpHeaders();
-				requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-				requestHeaders.add(ACCESS_TOKEN, txBean.getAccessToken());
-				InventoryQuantityReq inventory = new InventoryQuantityReq();
-				inventory.setSkuCode(createproductReq.getSkuCode());
-				inventory.setQuantity(0);
-				HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
-				ResponseEntity<String> responseEntity = restTemplate.postForEntity(uri, requestEntity, String.class);
-				 if(responseEntity!=null)*/
-               createproductReq.setStatus(SUCCESS);
+				// inventory call for initial product quantity as 0.
+				/*
+				 * RestTemplate restTemplate = new RestTemplate(); final String url =
+				 * "http://localhost:443/product"; URI uri = new URI(url); HttpHeaders
+				 * requestHeaders = new HttpHeaders(); requestHeaders.add("Content-Type",
+				 * MediaType.APPLICATION_JSON_VALUE); requestHeaders.add(ACCESS_TOKEN,
+				 * txBean.getAccessToken()); InventoryQuantityReq inventory = new
+				 * InventoryQuantityReq(); inventory.setSkuCode(createproductReq.getSkuCode());
+				 * inventory.setQuantity(0); HttpEntity<InventoryQuantityReq> requestEntity =
+				 * new HttpEntity<>(inventory, requestHeaders); ResponseEntity<String>
+				 * responseEntity = restTemplate.postForEntity(uri, requestEntity,
+				 * String.class); if(responseEntity!=null)
+				 */
+				createproductReq.setStatus(SUCCESS);
 			} else {
 				createproductReq.setStatus(env.getProperty(ALREADY));
 			}
@@ -104,14 +94,14 @@ public class ProductServiceImpl implements ProductService {
 			createproductReq.setSkuCode(deleteproductReq.getSkuCode());
 			Optional<CreateproductReq> product = repository.findById(deleteproductReq.getSkuCode());
 			if (product.isPresent()) {
-				if(product.get().isIs_deleted()==false){
-				product.get().setIs_deleted(true);
-				createproductReq = repository.save(product.get());
-				createproductReq.setStatus(SUCCESS);
-				}else {
+				if (product.get().isIs_deleted() == false) {
+					product.get().setIs_deleted(true);
+					createproductReq = repository.save(product.get());
+					createproductReq.setStatus(SUCCESS);
+				} else {
 					createproductReq.setStatus(ALREADY);
 				}
-				
+
 			} else {
 				createproductReq.setStatus(FAILED);
 			}
@@ -134,17 +124,22 @@ public class ProductServiceImpl implements ProductService {
 			Optional<CreateproductReq> product = repository.findById(updateproductReq.getSkuCode());
 
 			if (product.isPresent()) {
-				//product.get().setSkuCode(updateproductReq.getSkuCode());
-				if(!StringUtils.isEmpty(updateproductReq.getProductName())) {
-				product.get().setProductName(updateproductReq.getProductName());}
-				if(!StringUtils.isEmpty(updateproductReq.getProductDescrition())) {
-				product.get().setProductDescrition(updateproductReq.getProductDescrition());}
-				if(!StringUtils.isEmpty(updateproductReq.getListPrice())){
-			    product.get().setListPrice(updateproductReq.getListPrice());}
-				if(!StringUtils.isEmpty(updateproductReq.getSalePrice())) {
-				product.get().setSalePrice(updateproductReq.getSalePrice());}
-				if(!StringUtils.isEmpty(updateproductReq.getCategory())){
-				product.get().setCategory(updateproductReq.getCategory());}
+				// product.get().setSkuCode(updateproductReq.getSkuCode());
+				if (!StringUtils.isEmpty(updateproductReq.getProductName())) {
+					product.get().setProductName(updateproductReq.getProductName());
+				}
+				if (!StringUtils.isEmpty(updateproductReq.getProductDescrition())) {
+					product.get().setProductDescrition(updateproductReq.getProductDescrition());
+				}
+				if (!StringUtils.isEmpty(updateproductReq.getListPrice())) {
+					product.get().setListPrice(updateproductReq.getListPrice());
+				}
+				if (!StringUtils.isEmpty(updateproductReq.getSalePrice())) {
+					product.get().setSalePrice(updateproductReq.getSalePrice());
+				}
+				if (!StringUtils.isEmpty(updateproductReq.getCategory())) {
+					product.get().setCategory(updateproductReq.getCategory());
+				}
 				product.get().setIs_deleted(updateproductReq.isIs_deleted());
 				createproductReq = repository.save(product.get());
 				createproductReq.setStatus(SUCCESS);
@@ -204,12 +199,13 @@ public class ProductServiceImpl implements ProductService {
 		return productList;
 	}
 
-	public void setHystrixCommandProp(HystrixCommandPropertyResource hystrixCommandProp) {
-		this.hystrixCommandProp = hystrixCommandProp;
-	}
+	/*
+	 * public void setHystrixCommandProp(HystrixCommandPropertyResource
+	 * hystrixCommandProp) { this.hystrixCommandProp = hystrixCommandProp; }
+	 */
 
-	public CreateproductReq createProductFallback(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
-			throws ProductException {
+	public CreateproductReq createProductFallback(CreateproductReq createproductReq, Environment env,
+			TransactionBean txBean) throws ProductException {
 		log.error("Exception occured during Product insertion moved to Hystrix fallback");
 		throw new ProductException(env.getProperty("hystrix.fallback"));
 	}
@@ -221,4 +217,7 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	/*
+	 * public static void setLog(Logger log) { ProductServiceImpl.log = log; }
+	 */
 }

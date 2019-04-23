@@ -32,7 +32,7 @@ public class ProductControllerTest {
 
 	Environment env;
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected=ProductException.class)
 	public void testCreateProduct() throws ProductException {
 
 		CreateproductReq createproductReq = new CreateproductReq();
@@ -49,6 +49,24 @@ public class ProductControllerTest {
 		productController.createProduct("ABC", createproductReq);
 		assertEquals("ABC", createproductReq.getSkuCode());
 	}
+	
+	@Test(expected=ProductException.class)
+	public void testCreateProductException() throws ProductException {
+
+		CreateproductReq createproductReq = new CreateproductReq();
+		TransactionBean txnBean =  new TransactionBean();
+		txnBean.setAccessToken("gasfdghsaf");
+		createproductReq.setSkuCode("ABC");
+		createproductReq.setStatus("success");
+		ProductService productService = Mockito.mock(ProductServiceImpl.class);
+		env = Mockito.mock(Environment.class);
+		productController.setEnv(env);
+		//productController.setProductService(productService);
+
+		when(productService.createProduct(createproductReq, env, txnBean)).thenReturn(createproductReq);
+		productController.createProduct("ABC", createproductReq);
+	}
+	
 
 	@Test
 	public void testDeleteProduct() throws ProductException {
@@ -62,6 +80,24 @@ public class ProductControllerTest {
 		env = Mockito.mock(Environment.class);
 		productController.setEnv(env);
 		productController.setProductService(productService);
+
+		when(productService.deleteProduct(deleteproductReq, env)).thenReturn(createproductReq);
+		productController.deleteProduct("abjjhfgk", deleteproductReq);
+		assertEquals("ABC", deleteproductReq.getSkuCode());
+	}
+	
+	@Test(expected=ProductException.class)
+	public void testDeleteProductException() throws ProductException {
+
+		CreateproductReq createproductReq = new CreateproductReq(); //
+		createproductReq.setSkuCode("ABC");
+		createproductReq.setStatus("success");
+		DeleteproductReq deleteproductReq = new DeleteproductReq();
+		deleteproductReq.setSkuCode("ABC");
+		ProductService productService = Mockito.mock(ProductServiceImpl.class);
+		env = Mockito.mock(Environment.class);
+		productController.setEnv(env);
+		//productController.setProductService(productService);
 
 		when(productService.deleteProduct(deleteproductReq, env)).thenReturn(createproductReq);
 		productController.deleteProduct("abjjhfgk", deleteproductReq);
@@ -87,6 +123,26 @@ public class ProductControllerTest {
 		ResponseEntity<UpdateproductRes>  response=productController.updateProduct("abcd", updateproductReq);
 		assertEquals("200 OK",response.getStatusCode().toString());
 	}
+	
+	@Test(expected=ProductException.class)
+	public void testUpdateProductException() throws ProductException {
+
+		UpdateproductReq updateproductReq = new UpdateproductReq();
+		updateproductReq.setSkuCode("ABC");
+		updateproductReq.setProductName("updated");
+		DeleteproductReq deleteproductReq = new DeleteproductReq();
+		deleteproductReq.setSkuCode("ABC");
+		ProductService productService = Mockito.mock(ProductServiceImpl.class);
+		env = Mockito.mock(Environment.class);
+		productController.setEnv(env);
+		//productController.setProductService(productService);
+
+		CreateproductReq createproductReq = new CreateproductReq();
+		createproductReq.setSkuCode("ABC");
+		when(productService.updateProduct(updateproductReq, env)).thenReturn(createproductReq);
+		ResponseEntity<UpdateproductRes>  response=productController.updateProduct("abcd", updateproductReq);
+		assertEquals("200 OK",response.getStatusCode().toString());
+	}	
 	
 	@Test
 	public void testUpdateProductStatusCode() throws ProductException {
@@ -127,6 +183,25 @@ public class ProductControllerTest {
 		ResponseEntity<ViewproductRes>  response=productController.viewProductBySkuCode("abc", skuCode);
 		assertEquals("200 OK",response.getStatusCode().toString());
 	}
+	
+	@Test(expected=ProductException.class)
+	public void testViewProductBySkuCodeException() {
+
+		String skuCode="ABC";
+		ProductService productService = Mockito.mock(ProductServiceImpl.class);
+		env = Mockito.mock(Environment.class);
+		productController.setEnv(env);
+		//productController.setProductService(productService);
+
+		CreateproductReq createproductReq = new CreateproductReq();
+		createproductReq.setSkuCode("ABC");
+		List<CreateproductReq> pList=new ArrayList<CreateproductReq>();
+		pList.add(createproductReq);
+		when(productService.viewproductbyskuCode(skuCode, env)).thenReturn(pList);
+		
+		productController.viewProductBySkuCode("abc", skuCode);
+	}
+	
 	
 	@Test
 	public void testViewProducts() {

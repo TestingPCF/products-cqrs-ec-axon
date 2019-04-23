@@ -83,8 +83,8 @@ public class ProductController {
 
 			createproductReq = productService.createProduct(createproductReq, env, txBean);
 			createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);
-		} catch (ProductException ex) {
-			throw ex;
+		} catch (Exception ex) {
+			throw new ProductException(ex.getMessage());
 		}
 
 		log.info("createProduct call end");
@@ -111,8 +111,8 @@ public class ProductController {
 		try {
 			createproductReq = productService.deleteProduct(deleteproductReq, env);
 			deleteproductRes = dpt.deleteproductresponseTranslator(createproductReq, env);
-		} catch (ProductException ex) {
-			throw ex;
+		} catch (Exception ex) {
+			throw new ProductException(ex.getMessage());
 		}
 
 		log.info("deleteProduct call end");
@@ -139,7 +139,7 @@ public class ProductController {
 			createproductReq = productService.updateProduct(updateproductReq, env);
 			updateproductRes = updateTranslator.updateProductResponseTranslator(createproductReq, env);
 		} catch (Exception ex) {
-			throw ex;
+			throw new ProductException(ex.getMessage());
 		}
 
 		log.info("updateProduct call end");
@@ -167,8 +167,8 @@ public class ProductController {
 				List<CreateproductReq> pList = productService.viewproductbyskuCode(skuCode, env);
 				viewproductRes = vpt.viewProductbySkuCodeResponseTranslator(pList, env);
 			}
-		} catch (ProductException ex) {
-			throw ex;
+		} catch (Exception ex) {
+			throw new ProductException(ex.getMessage());
 		}
 		log.info("viewProductBySkuCode call end");
 		return ResponseEntity.ok().body(viewproductRes);
