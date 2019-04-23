@@ -5,6 +5,7 @@ import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
 import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
 import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,17 +14,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
+import com.hcl.cloud.product.request.InventoryQuantityReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
 import com.hcl.cloud.product.resources.HystrixCommandPropertyResource;
 import com.hcl.cloud.product.resources.TransactionBean;
+import com.hcl.cloud.product.response.InventoryQuantityRes;
 import com.hcl.cloud.product.service.ProductService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
@@ -58,20 +66,24 @@ public class ProductServiceImpl implements ProductService {
 
 			if (!product.isPresent()) {
 				createproductReq = repository.save(createproductReq);
+
 				// inventory call for initial product quantity as 0.
-				/*
-				 * RestTemplate restTemplate = new RestTemplate(); final String url =
-				 * "http://localhost:443/product"; URI uri = new URI(url); HttpHeaders
-				 * requestHeaders = new HttpHeaders(); requestHeaders.add("Content-Type",
-				 * MediaType.APPLICATION_JSON_VALUE); requestHeaders.add(ACCESS_TOKEN,
-				 * txBean.getAccessToken()); InventoryQuantityReq inventory = new
-				 * InventoryQuantityReq(); inventory.setSkuCode(createproductReq.getSkuCode());
-				 * inventory.setQuantity(0); HttpEntity<InventoryQuantityReq> requestEntity =
-				 * new HttpEntity<>(inventory, requestHeaders); ResponseEntity<String>
-				 * responseEntity = restTemplate.postForEntity(uri, requestEntity,
-				 * String.class); if(responseEntity!=null)
-				 */
-				createproductReq.setStatus(SUCCESS);
+
+				RestTemplate restTemplate = new RestTemplate();
+				final String url = "http://Inventory-MS-soppy-weathering.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
+				URI uri = new URI(url);
+				HttpHeaders requestHeaders = new HttpHeaders();
+				requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+				requestHeaders.add("ACCESS_TOKEN", txBean.getAccessToken());
+				InventoryQuantityReq inventory = new InventoryQuantityReq();
+				inventory.setSkuCode(createproductReq.getSkuCode());
+				inventory.setQuantity(0);
+				HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
+				ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
+						InventoryQuantityRes.class);
+				if (responseEntity != null) {
+					createproductReq.setStatus(SUCCESS);
+				}
 			} else {
 				createproductReq.setStatus(env.getProperty(ALREADY));
 			}
