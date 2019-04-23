@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 				// inventory call for initial product quantity as 0.
 
 				RestTemplate restTemplate = new RestTemplate();
-				final String url = "http://Inventory-MS-soppy-weathering.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
+				final String url = "http://Inventory-MS-soppy-weathering.apps.cnpsandbox.dryice01.in.hclcnlabs.com/api/inventory";
 				URI uri = new URI(url);
 				HttpHeaders requestHeaders = new HttpHeaders();
 				requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
