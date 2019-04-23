@@ -7,22 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 
-import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
 import com.hcl.cloud.product.resources.TransactionBean;
-import com.hcl.cloud.product.response.ViewproductRes;
-import com.hcl.cloud.product.service.ProductService;
 
 public class ProductServiceImplTest {
 
@@ -170,7 +164,7 @@ public class ProductServiceImplTest {
 		productService.setRepository(repository);
 		when(repository.findAll()).thenReturn(productRequest);
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
-		String skuCode = "ABC";
+
 		List<CreateproductReq> returnList = productService.viewProducts(env);
 		assertEquals("ABC", returnList.get(0).getSkuCode());
 	}
@@ -190,7 +184,7 @@ public class ProductServiceImplTest {
 		// productService.setRepository(repository);
 		when(repository.findAll()).thenReturn(productRequest);
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
-		String skuCode = "ABC";
+
 		List<CreateproductReq> returnList = productService.viewProducts(env);
 		assertEquals("ABC", returnList.get(0).getSkuCode());
 	}
@@ -210,7 +204,7 @@ public class ProductServiceImplTest {
 		productService.setRepository(repository);
 		when(repository.findById("ABC")).thenReturn(productRequest);
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
-		String skuCode = "ABC";
+
 		DeleteproductReq deleteproductReq = new DeleteproductReq();
 		deleteproductReq.setSkuCode("ABC");
 		CreateproductReq response = productService.deleteProduct(deleteproductReq, env);
@@ -232,7 +226,7 @@ public class ProductServiceImplTest {
 		// productService.setRepository(repository);
 		when(repository.findById("ABC")).thenReturn(productRequest);
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
-		String skuCode = "ABC";
+
 		DeleteproductReq deleteproductReq = new DeleteproductReq();
 		deleteproductReq.setSkuCode("ABC");
 		CreateproductReq response = productService.deleteProduct(deleteproductReq, env);
@@ -254,7 +248,7 @@ public class ProductServiceImplTest {
 		productService.setRepository(repository);
 		when(repository.findById("ABC")).thenReturn(productRequest);
 		when(repository.save(createproductReq)).thenReturn(createproductReq);
-		String skuCode = "ABC";
+
 		DeleteproductReq deleteproductReq = new DeleteproductReq();
 		deleteproductReq.setSkuCode("ABC");
 		CreateproductReq response = productService.deleteProduct(deleteproductReq, env);
@@ -268,7 +262,7 @@ public class ProductServiceImplTest {
 		createproductReq.setSkuCode("ABC");
 		// createproductReq.setStatus("success");
 		createproductReq.setIs_deleted(false);
-		Optional<CreateproductReq> productRequest = Optional.of(createproductReq);
+
 		TransactionBean txBean = new TransactionBean();
 		txBean.setAccessToken("gasfdghsaf");
 		ProductRepository repository = Mockito.mock(ProductRepository.class);
