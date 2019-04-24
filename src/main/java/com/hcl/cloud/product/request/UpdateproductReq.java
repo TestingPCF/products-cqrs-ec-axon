@@ -6,24 +6,45 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
 /**
  * 
- * @author BrijendraK
+ * @author Brijendra and Kapil
  *
  */
 public class UpdateproductReq {
 
+    /**.
+     * skuCode
+     */
     @Id
     @NotNull
     private String skuCode = null;
 
+    /**.
+     * productName
+     */
     private String productName = null;
-    @Min(value=1)
+    /**.
+     * salePrice
+     */
+    @Min(value = 1)
     private Integer salePrice;
-    @Min(value=1)
+    /**.
+     * listPrice
+     */
+    @Min(value = 1)
     private Integer listPrice;
+    /**.
+     * productDescrition
+     */
     private String productDescrition = null;
+    /**.
+     * category
+     */
     private String category = null;
+    /**.
+     * is_deleted flag
+     */
     private boolean is_deleted = false;
-    /**
+    /**.
      * @return the String
      */
     public String getSkuCode() {
@@ -32,7 +53,7 @@ public class UpdateproductReq {
     /**
      * @param skuCode  to set
      */
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
     /**
@@ -44,7 +65,7 @@ public class UpdateproductReq {
     /**
      * @param productName  to set
      */
-    public void setProductName(String productName) {
+    public void setProductName( final String productName) {
         this.productName = productName;
     }
     /**
@@ -56,7 +77,7 @@ public class UpdateproductReq {
     /**
      * @param salePrice  to set
      */
-    public void setSalePrice(Integer salePrice) {
+    public void setSalePrice(final Integer salePrice) {
         this.salePrice = salePrice;
     }
     /**
@@ -68,7 +89,7 @@ public class UpdateproductReq {
     /**
      * @param listPrice  to set
      */
-    public void setListPrice(Integer listPrice) {
+    public void setListPrice( final Integer listPrice) {
         this.listPrice = listPrice;
     }
     /**
@@ -92,7 +113,7 @@ public class UpdateproductReq {
     /**
      * @param category  to set
      */
-    public void setCategory(String category) {
+    public void setCategory(final String category) {
         this.category = category;
     }
     /**
@@ -104,7 +125,7 @@ public class UpdateproductReq {
     /**
      * @param is_deleted  to set
      */
-    public void setIs_deleted(boolean is_deleted) {
+    public void setIs_deleted(final boolean is_deleted) {
         this.is_deleted = is_deleted;
     }
 }

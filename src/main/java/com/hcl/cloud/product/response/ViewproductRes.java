@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hcl.cloud.product.request.CreateproductReq;
 /**
- * 
+ * @author Brijendra and Kapil
  * Entity class for View Product Response
  *
  */

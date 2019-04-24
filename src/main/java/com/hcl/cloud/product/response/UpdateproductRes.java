@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 
- * @author Entity class for Product Response
+ * @author Brijendra and Kapil
+ * Entity class for Product Response
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

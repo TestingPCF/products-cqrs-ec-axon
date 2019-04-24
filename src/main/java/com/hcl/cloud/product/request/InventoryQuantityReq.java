@@ -1,7 +1,7 @@
 package com.hcl.cloud.product.request;
 
 /**
- * @author BrijendraK
+ * @author Brijendra and Kapil
  *
  */
 public class InventoryQuantityReq {

@@ -38,7 +38,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 /**
  * 
- * @author BrijendraK
+ * @author ProductService
+ * ProductServiceImpl
  *
  */
 @Service

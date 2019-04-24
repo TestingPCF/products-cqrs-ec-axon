@@ -37,7 +37,7 @@ import com.hcl.cloud.product.service.ProductService;
 
 /**
  * 
- * @author BrijendraK
+ * @author Brijendra and Kapil
  *
  */
 @RestController
@@ -153,7 +153,7 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.GET, value = VIEW_PRODUCT_BYSKUCODE_URI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProductBySkuCode(
-            @RequestHeader(value = ACCESS_TOKEN, required = true) String accessToken,
+             String accessToken,
             @PathVariable(SKU_CODE) String skuCode) throws ProductException {
         log.info("viewProductBySkuCode call start");
         ViewProductbySkuCodeResponseTranslator vpt = new ViewProductbySkuCodeResponseTranslator();

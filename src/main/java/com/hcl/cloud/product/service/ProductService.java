@@ -12,7 +12,8 @@ import com.hcl.cloud.product.resources.TransactionBean;
 
 /**
  * 
- * @author BrijendraK
+ * @author Brijendra and Kapil
+ * Interface for ProductService
  *
  */
 public interface ProductService {

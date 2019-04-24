@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * 
- * @author BrijendraK
+ * @author Brijendra and Kapil
  *
  */
 public class DeleteproductReq {

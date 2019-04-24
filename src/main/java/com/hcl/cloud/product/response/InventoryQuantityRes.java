@@ -1,7 +1,8 @@
 package com.hcl.cloud.product.response;
 
 /**
- * @author Entity class for Inventory Response
+ * @author Brijendra and Kapil 
+ * Entity class for Inventory Response
  *
  */
 public class InventoryQuantityRes {
