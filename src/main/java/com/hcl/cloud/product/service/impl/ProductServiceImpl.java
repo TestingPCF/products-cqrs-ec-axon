@@ -44,16 +44,16 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-	@Autowired
-	private ProductRepository repository;
+    @Autowired
+    private ProductRepository repository;
 
-	public void setRepository(ProductRepository repository) {
-		this.repository = repository;
-	}
+    public void setRepository(ProductRepository repository) {
+        this.repository = repository;
+    }
 
-	private ProductCacheManager productCacheManager;
-	
-	/**
+    private ProductCacheManager productCacheManager;
+
+    /**
      * @param productCacheManager  to set
      */
     public void setProductCacheManager(ProductCacheManager productCacheManager) {
@@ -61,205 +61,205 @@ public class ProductServiceImpl implements ProductService {
     }
 
     ProductServiceImpl(){}
-	
-	@Autowired
-	public ProductServiceImpl(ProductCacheManager productCacheManager) {
-		this.productCacheManager = productCacheManager;
-	}
 
-	@Autowired
-	HystrixCommandPropertyResource hystrixCommandProp;
-	static Logger log = LoggerFactory.getLogger(ProductController.class);
+    @Autowired
+    public ProductServiceImpl(ProductCacheManager productCacheManager) {
+        this.productCacheManager = productCacheManager;
+    }
 
-	@Override
-	@HystrixCommand(fallbackMethod = "createProductFallback", commandKey = "CREATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
-	public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
-			throws ProductException {
+    @Autowired
+    HystrixCommandPropertyResource hystrixCommandProp;
+    static Logger log = LoggerFactory.getLogger(ProductController.class);
 
-		log.info("Product detail insetion DB call Start");
-		try {
+    @Override
+    @HystrixCommand(fallbackMethod = "createProductFallback", commandKey = "CREATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
+    public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
+            throws ProductException {
 
-			Optional<CreateproductReq> product = repository.findById(createproductReq.getSkuCode());
+        log.info("Product detail insetion DB call Start");
+        try {
 
-			if (!product.isPresent()) {
-				createproductReq = repository.save(createproductReq);
+            Optional<CreateproductReq> product = repository.findById(createproductReq.getSkuCode());
 
-				// inventory call for initial product quantity as 0.
+            if (!product.isPresent()) {
+                createproductReq = repository.save(createproductReq);
 
-				/*RestTemplate restTemplate = new RestTemplate();
-				final String url = "http://Inventory-MS-soppy-weathering.apps.cnpsandbox.dryice01.in.hclcnlabs.com/api/inventory";
-				URI uri = new URI(url);
-				HttpHeaders requestHeaders = new HttpHeaders();
-				requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-				requestHeaders.add("ACCESS_TOKEN", txBean.getAccessToken());
-				InventoryQuantityReq inventory = new InventoryQuantityReq();
-				inventory.setSkuCode(createproductReq.getSkuCode());
-				inventory.setQuantity(0);
-				HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
-				ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
-						InventoryQuantityRes.class);
-				if (responseEntity != null) {*/
-				    log.info("Product created successfully putting into cache");
-					// If product created successfully put it in cache for future use
-					productCacheManager.cacheProductDetails(createproductReq);
-					createproductReq.setStatus(SUCCESS);
-				//}
-			} else {
-				createproductReq.setStatus(env.getProperty(ALREADY));
-			}
-			log.info("Product created successfully");
-		} catch (Exception ex) {
-			log.error("Error occured during Product creation");
-			throw new ProductException(ex.getMessage());
-		}
-		log.info("Product detail insetion DB call End");
-		return createproductReq;
-	}
+                // inventory call for initial product quantity as 0.
 
-	@Override
-	@HystrixCommand(fallbackMethod = "deleteProductFallback", commandKey = "DELETEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
-	public CreateproductReq deleteProduct(DeleteproductReq deleteproductReq, Environment env) throws ProductException {
-		CreateproductReq createproductReq = new CreateproductReq();
-		log.info("Product detail delete DB call Start");
-		try {
+                RestTemplate restTemplate = new RestTemplate();
+                final String url = "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
+                URI uri = new URI(url);
+                HttpHeaders requestHeaders = new HttpHeaders();
+                requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+                requestHeaders.add("ACCESS_TOKEN", txBean.getAccessToken());
+                InventoryQuantityReq inventory = new InventoryQuantityReq();
+                inventory.setSkuCode(createproductReq.getSkuCode());
+                inventory.setQuantity(0);
+                HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
+                ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
+                        InventoryQuantityRes.class);
+                if (responseEntity != null) {
+                    log.info("Product created successfully putting into cache");
+                    // If product created successfully put it in cache for future use
+                    productCacheManager.cacheProductDetails(createproductReq);
+                    createproductReq.setStatus(SUCCESS);
+                }
+            } else {
+                createproductReq.setStatus(env.getProperty(ALREADY));
+            }
+            log.info("Product created successfully");
+        } catch (Exception ex) {
+            log.error("Error occured during Product creation");
+            throw new ProductException(ex.getMessage());
+        }
+        log.info("Product detail insetion DB call End");
+        return createproductReq;
+    }
 
-			createproductReq.setSkuCode(deleteproductReq.getSkuCode());
-			Optional<CreateproductReq> product = repository.findById(deleteproductReq.getSkuCode());
-			if (product.isPresent()) {
-				if (product.get().isIs_deleted() == false) {
-					product.get().setIs_deleted(true);
-					createproductReq = repository.save(product.get());
-					createproductReq.setStatus(SUCCESS);
-					// After successful deletion of product remove it from cache
-					productCacheManager.removeProductFromCache(createproductReq);
-				} else {
-					createproductReq.setStatus(ALREADY);
-				}
+    @Override
+    @HystrixCommand(fallbackMethod = "deleteProductFallback", commandKey = "DELETEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
+    public CreateproductReq deleteProduct(DeleteproductReq deleteproductReq, Environment env) throws ProductException {
+        CreateproductReq createproductReq = new CreateproductReq();
+        log.info("Product detail delete DB call Start");
+        try {
 
-			} else {
-				createproductReq.setStatus(FAILED);
-			}
+            createproductReq.setSkuCode(deleteproductReq.getSkuCode());
+            Optional<CreateproductReq> product = repository.findById(deleteproductReq.getSkuCode());
+            if (product.isPresent()) {
+                if (product.get().isIs_deleted() == false) {
+                    product.get().setIs_deleted(true);
+                    createproductReq = repository.save(product.get());
+                    createproductReq.setStatus(SUCCESS);
+                    // After successful deletion of product remove it from cache
+                    productCacheManager.removeProductFromCache(createproductReq);
+                } else {
+                    createproductReq.setStatus(ALREADY);
+                }
 
-			log.info("Product deleted successfully");
-		} catch (Exception ex) {
-			log.error("Error occured during Product deletion");
-			throw new ProductException(ex.getMessage());
-		}
-		log.info("Product detail delete DB call End");
-		return createproductReq;
-	}
+            } else {
+                createproductReq.setStatus(FAILED);
+            }
 
-	@Override
-	public CreateproductReq updateProduct(UpdateproductReq updateproductReq, Environment env) throws ProductException {
-		log.info("Product detail update DB call Start");
-		CreateproductReq createproductReq = new CreateproductReq();
-		try {
+            log.info("Product deleted successfully");
+        } catch (Exception ex) {
+            log.error("Error occured during Product deletion");
+            throw new ProductException(ex.getMessage());
+        }
+        log.info("Product detail delete DB call End");
+        return createproductReq;
+    }
 
-			Optional<CreateproductReq> product = repository.findById(updateproductReq.getSkuCode());
+    @Override
+    public CreateproductReq updateProduct(UpdateproductReq updateproductReq, Environment env) throws ProductException {
+        log.info("Product detail update DB call Start");
+        CreateproductReq createproductReq = new CreateproductReq();
+        try {
 
-			if (product.isPresent()) {
-				// product.get().setSkuCode(updateproductReq.getSkuCode());
-				if (!StringUtils.isEmpty(updateproductReq.getProductName())) {
-					product.get().setProductName(updateproductReq.getProductName());
-				}
-				if (!StringUtils.isEmpty(updateproductReq.getProductDescrition())) {
-					product.get().setProductDescrition(updateproductReq.getProductDescrition());
-				}
-				if (!StringUtils.isEmpty(updateproductReq.getListPrice())) {
-					product.get().setListPrice(updateproductReq.getListPrice());
-				}
-				if (!StringUtils.isEmpty(updateproductReq.getSalePrice())) {
-					product.get().setSalePrice(updateproductReq.getSalePrice());
-				}
-				if (!StringUtils.isEmpty(updateproductReq.getCategory())) {
-					product.get().setCategory(updateproductReq.getCategory());
-				}
-				product.get().setIs_deleted(updateproductReq.isIs_deleted());
-				createproductReq = repository.save(product.get());
-				createproductReq.setStatus(SUCCESS);
-			} else {
-				createproductReq.setStatus(ALREADY);
-			}
+            Optional<CreateproductReq> product = repository.findById(updateproductReq.getSkuCode());
 
-		} catch (Exception ex) {
-			log.error("Error occured during Product detail update DB");
-			throw new ProductException(ex.getMessage());
-		}
+            if (product.isPresent()) {
+                // product.get().setSkuCode(updateproductReq.getSkuCode());
+                if (!StringUtils.isEmpty(updateproductReq.getProductName())) {
+                    product.get().setProductName(updateproductReq.getProductName());
+                }
+                if (!StringUtils.isEmpty(updateproductReq.getProductDescrition())) {
+                    product.get().setProductDescrition(updateproductReq.getProductDescrition());
+                }
+                if (!StringUtils.isEmpty(updateproductReq.getListPrice())) {
+                    product.get().setListPrice(updateproductReq.getListPrice());
+                }
+                if (!StringUtils.isEmpty(updateproductReq.getSalePrice())) {
+                    product.get().setSalePrice(updateproductReq.getSalePrice());
+                }
+                if (!StringUtils.isEmpty(updateproductReq.getCategory())) {
+                    product.get().setCategory(updateproductReq.getCategory());
+                }
+                product.get().setIs_deleted(updateproductReq.isIs_deleted());
+                createproductReq = repository.save(product.get());
+                createproductReq.setStatus(SUCCESS);
+            } else {
+                createproductReq.setStatus(ALREADY);
+            }
 
-		log.info("Product detail update DB call end");
-		return createproductReq;
+        } catch (Exception ex) {
+            log.error("Error occured during Product detail update DB");
+            throw new ProductException(ex.getMessage());
+        }
 
-	}
+        log.info("Product detail update DB call end");
+        return createproductReq;
 
-	@Override
-	public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
-		log.info("View ProductBySkuCode DB call start");
-		List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
-		if (null != skuCode) {
-			try {
-				// try to get product from cache
-				CreateproductReq cachedProduct = productCacheManager.getProductFromCache(skuCode);
-				if (cachedProduct != null) {
-					log.info("Found product from cache. Returning !!!!");
-					productList.add(cachedProduct);
-				} else {
-					log.info("Could not found product from cahce. Going to fetch from DB now !!!!");
-					Optional<CreateproductReq> product = repository.findById(skuCode);
-					if (product.isPresent()) {
-						productList.add(product.get());
-					}
-				}
+    }
 
-			} catch (Exception e) {
-				log.error("Error occured during view Product detail");
-				throw new ProductException(e.getMessage());
+    @Override
+    public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
+        log.info("View ProductBySkuCode DB call start");
+        List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
+        if (null != skuCode) {
+            try {
+                // try to get product from cache
+                CreateproductReq cachedProduct = productCacheManager.getProductFromCache(skuCode);
+                if (cachedProduct != null) {
+                    log.info("Found product from cache. Returning !!!!");
+                    productList.add(cachedProduct);
+                } else {
+                    log.info("Could not found product from cahce. Going to fetch from DB now !!!!");
+                    Optional<CreateproductReq> product = repository.findById(skuCode);
+                    if (product.isPresent()) {
+                        productList.add(product.get());
+                    }
+                }
 
-			}
-		}
+            } catch (Exception e) {
+                log.error("Error occured during view Product detail");
+                throw new ProductException(e.getMessage());
 
-		log.info("View ProductBySkuCode DB call end");
-		return productList;
-	}
+            }
+        }
 
-	@Override
-	public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
-		log.info("View Products DB call start");
-		List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
+        log.info("View ProductBySkuCode DB call end");
+        return productList;
+    }
 
-		try {
+    @Override
+    public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
+        log.info("View Products DB call start");
+        List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
 
-			productList = repository.findAll();
+        try {
 
-		} catch (Exception e) {
-			log.error("Error occured during view Product detail");
-			throw new ProductException(e.getMessage());
+            productList = repository.findAll();
 
-		}
+        } catch (Exception e) {
+            log.error("Error occured during view Product detail");
+            throw new ProductException(e.getMessage());
 
-		log.info("View Products DB call end");
+        }
 
-		return productList;
-	}
+        log.info("View Products DB call end");
 
-	/*
-	 * public void setHystrixCommandProp(HystrixCommandPropertyResource
-	 * hystrixCommandProp) { this.hystrixCommandProp = hystrixCommandProp; }
-	 */
+        return productList;
+    }
 
-	public CreateproductReq createProductFallback(CreateproductReq createproductReq, Environment env,
-			TransactionBean txBean) throws ProductException {
-		log.error("Exception occured during Product insertion moved to Hystrix fallback");
-		throw new ProductException(env.getProperty("hystrix.fallback"));
-	}
+    /*
+     * public void setHystrixCommandProp(HystrixCommandPropertyResource
+     * hystrixCommandProp) { this.hystrixCommandProp = hystrixCommandProp; }
+     */
 
-	public CreateproductReq deleteProductFallback(DeleteproductReq deleteproductReq, Environment env)
-			throws ProductException {
-		log.error("Exception occured during find Product moved to Hystrix fallback");
-		throw new ProductException(env.getProperty("hystrix.fallback"));
+    public CreateproductReq createProductFallback(CreateproductReq createproductReq, Environment env,
+            TransactionBean txBean) throws ProductException {
+        log.error("Exception occured during Product insertion moved to Hystrix fallback");
+        throw new ProductException(env.getProperty("hystrix.fallback"));
+    }
 
-	}
+    public CreateproductReq deleteProductFallback(DeleteproductReq deleteproductReq, Environment env)
+            throws ProductException {
+        log.error("Exception occured during find Product moved to Hystrix fallback");
+        throw new ProductException(env.getProperty("hystrix.fallback"));
 
-	/*
-	 * public static void setLog(Logger log) { ProductServiceImpl.log = log; }
-	 */
+    }
+
+    /*
+     * public static void setLog(Logger log) { ProductServiceImpl.log = log; }
+     */
 }

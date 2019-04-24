@@ -5,14 +5,20 @@ package com.hcl.cloud.product.resources;
  *
  */
 public class TransactionBean {
-	
-	private String accessToken = null;
 
-	public String getAccessToken() {
-		return accessToken;
-	}
+    private String accessToken = null;
 
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
-	}
+    /**
+     * @return the String
+     */
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    /**
+     * @param accessToken  to set
+     */
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

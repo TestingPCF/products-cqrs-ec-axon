@@ -10,52 +10,52 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ProductException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-	private Date timestamp;
-	private String message;
-	private int errorCode;
+    private static final long serialVersionUID = 1L;
+    private Date timestamp;
+    private String message;
+    private int errorCode;
 
-	/**
-	 * @param exception
-	 */
-	public ProductException(String exception) {
-		super(exception);
-	}
+    /**
+     * @param exception
+     */
+    public ProductException(String exception) {
+        super(exception);
+    }
 
-	/**
-	 * 
-	 * @param timestamp
-	 * @param message
-	 * @param errorCode
-	 */
-	public ProductException(Date timestamp, String message, int errorCode) {
-		super();
-		this.timestamp = timestamp;
-		this.message = message;
-		this.errorCode = errorCode;
-	}
+    /**
+     * 
+     * @param timestamp
+     * @param message
+     * @param errorCode
+     */
+    public ProductException(Date timestamp, String message, int errorCode) {
+        super();
+        this.timestamp = timestamp;
+        this.message = message;
+        this.errorCode = errorCode;
+    }
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
+    public Date getTimestamp() {
+        return timestamp;
+    }
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public int getErrorCode() {
-		return errorCode;
-	}
+    public int getErrorCode() {
+        return errorCode;
+    }
 
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
-	}
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
+    }
 }

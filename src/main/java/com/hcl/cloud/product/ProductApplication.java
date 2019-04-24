@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import com.hcl.cloud.product.controller.ProductController;
 /**
  * 
- * @author BrijendraK
+ * @author Brijendra and Kapil
  *
  */
 @EnableHystrix
@@ -26,22 +26,31 @@ public class ProductApplication {
 
     static Logger log = LoggerFactory.getLogger(ProductController.class);
 
+    /**
+     * @param args the argument for main
+     */
     public static void main(String[] args) {
         SpringApplication.run(ProductApplication.class, args);
     }
-    
-        @Bean
-            JedisConnectionFactory jedisConnectionFactory() {
-                return new JedisConnectionFactory();
-            }
 
-            @Bean
-            public RedisTemplate<String, Object> redisTemplate() {
-                RedisTemplate<String, Object> template = new RedisTemplate<>();
-                template.setConnectionFactory(jedisConnectionFactory());
-                return template;
-            } 
-         
+    /**
+     * @return JedisConnectionFactory
+     */
+    @Bean
+    JedisConnectionFactory jedisConnectionFactory() {
+        return new JedisConnectionFactory();
+    }
+
+    /**
+     * @return RedisTemplate
+     */
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(jedisConnectionFactory());
+        return template;
+    } 
+
 
 
 }

@@ -1,5 +1,9 @@
 package com.hcl.cloud.product.response;
 
+/**
+ * @author Entity class for Inventory Response
+ *
+ */
 public class InventoryQuantityRes {
 
     // skuCode

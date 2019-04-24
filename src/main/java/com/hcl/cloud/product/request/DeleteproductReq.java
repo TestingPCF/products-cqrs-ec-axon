@@ -10,19 +10,19 @@ import javax.validation.constraints.NotNull;
 public class DeleteproductReq {
 
     @NotNull
-	private String skuCode = null;
+    private String skuCode = null;
 
-	/**
-	 * @return
-	 */
-	public String getSkuCode() {
-		return skuCode;
-	}
+    /**
+     * @return the String
+     */
+    public String getSkuCode() {
+        return skuCode;
+    }
 
-	/**
-	 * @param skuCode
-	 */
-	public void setSkuCode(String skuCode) {
-		this.skuCode = skuCode;
-	}
+    /**
+     * @param skuCode  to set
+     */
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
 }

@@ -7,48 +7,63 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hcl.cloud.product.request.CreateproductReq;
 /**
  * 
- * @author BrijendraK
+ * Entity class for View Product Response
  *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ViewproductRes {
 
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
-	private String skuCode = null;
-	private String statusCode=null;
-	private String status = null;
-	
-	public List<CreateproductReq> getProductList() {
-		return productList;
-	}
-
-	public void setProductList(List<CreateproductReq> productList) {
-		this.productList = productList;
-	}
-
-	public String getSkuCode() {
-		return skuCode;
-	}
-
-	public void setSkuCode(String skuCode) {
-		this.skuCode = skuCode;
-	}
-
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(String created) {
-		this.statusCode = created;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
+    private String skuCode = null;
+    private String statusCode=null;
+    private String status = null;
+    /**
+     * @return the List<CreateproductReq>
+     */
+    public List<CreateproductReq> getProductList() {
+        return productList;
+    }
+    /**
+     * @param productList  to set
+     */
+    public void setProductList(List<CreateproductReq> productList) {
+        this.productList = productList;
+    }
+    /**
+     * @return the String
+     */
+    public String getSkuCode() {
+        return skuCode;
+    }
+    /**
+     * @param skuCode  to set
+     */
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
+    /**
+     * @return the String
+     */
+    public String getStatusCode() {
+        return statusCode;
+    }
+    /**
+     * @param statusCode  to set
+     */
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
+    /**
+     * @return the String
+     */
+    public String getStatus() {
+        return status;
+    }
+    /**
+     * @param status  to set
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
