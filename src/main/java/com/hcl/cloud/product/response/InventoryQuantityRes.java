@@ -2,40 +2,68 @@ package com.hcl.cloud.product.response;
 
 public class InventoryQuantityRes {
 
-	private String skuCode = null;
-	private Integer quantity = 0;
-	private boolean activeStatus;
-	private boolean inStock;
+    // skuCode
+    private String skuCode = null;
+    // quantity
+    private Integer quantity = 0;
+    // activeStatus
+    private boolean activeStatus;
+    // inStock
+    private boolean inStock;
 
-	public String getSkuCode() {
-		return skuCode;
-	}
+    /**
+     * @return the String
+     */
+    public String getSkuCode() {
+        return skuCode;
+    }
 
-	public void setSkuCode(String skuCode) {
-		this.skuCode = skuCode;
-	}
+    /**
+     * @param skuCode to set
+     */
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
 
-	public Integer getQuantity() {
-		return quantity;
-	}
+    /**
+     * @return the Integer
+     */
+    public Integer getQuantity() {
+        return quantity;
+    }
 
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
+    /**
+     * @param quantity to set
+     */
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 
-	public boolean isActiveStatus() {
-		return activeStatus;
-	}
+    /**
+     * @return the boolean
+     */
+    public boolean isActiveStatus() {
+        return activeStatus;
+    }
 
-	public void setActiveStatus(boolean activeStatus) {
-		this.activeStatus = activeStatus;
-	}
+    /**
+     * @param activeStatus to set
+     */
+    public void setActiveStatus(boolean activeStatus) {
+        this.activeStatus = activeStatus;
+    }
 
-	public boolean isInStock() {
-		return inStock;
-	}
+    /**
+     * @return the boolean
+     */
+    public boolean isInStock() {
+        return inStock;
+    }
 
-	public void setInStock(boolean inStock) {
-		this.inStock = inStock;
-	}
+    /**
+     * @param inStock to set
+     */
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
 }

@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
-
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.response.UpdateproductRes;
 import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 
 
+/**
+ * @author BrijendraK
+ *
+ */
 public class UpdateProductResponseTranslator {
 	static Logger log = LoggerFactory.getLogger(UpdateProductResponseTranslator.class);
 
@@ -24,7 +27,6 @@ public class UpdateProductResponseTranslator {
 	public UpdateproductRes updateProductResponseTranslator(CreateproductReq creReq, Environment env) {
 		log.info("Response translation from backend to frontend start");
 		UpdateproductRes updateproductRes = new UpdateproductRes();
-
 		if (!StringUtils.isEmpty(creReq.getStatus()) && creReq.getStatus().equals(SUCCESS)) {
 			updateproductRes.setStatus(env.getProperty("product.update.successmsg"));
 			updateproductRes.setStatusCode(String.valueOf(HttpStatus.OK.value()));
@@ -34,7 +36,5 @@ public class UpdateProductResponseTranslator {
 		}
 		log.info("Response translation from backend to frontend end");
 		return updateproductRes;
-
 	}
-
 }

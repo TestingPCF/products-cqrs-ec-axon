@@ -79,5 +79,4 @@ public class UpdateproductReq {
 	public void setIs_deleted(boolean is_deleted) {
 		this.is_deleted = is_deleted;
 	}
-
 }

@@ -1,13 +1,11 @@
 package com.hcl.cloud.product.exception;
 
 import java.util.Date;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
-
 /**
  * 
  * @author BrijendraK
@@ -43,5 +41,4 @@ public class GlobalExceptionHandler {
 				String.valueOf(HttpStatus.NOT_FOUND.value()));
 		return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
 }

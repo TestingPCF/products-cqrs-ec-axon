@@ -6,7 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.hcl.cloud.product.controller.ProductController;
 /**
@@ -21,10 +24,24 @@ import com.hcl.cloud.product.controller.ProductController;
 @PropertySource("classpath:HystrixCommand.properties")
 public class ProductApplication {
 
-	static Logger log = LoggerFactory.getLogger(ProductController.class);
+    static Logger log = LoggerFactory.getLogger(ProductController.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProductApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ProductApplication.class, args);
+    }
+    
+        @Bean
+            JedisConnectionFactory jedisConnectionFactory() {
+                return new JedisConnectionFactory();
+            }
+
+            @Bean
+            public RedisTemplate<String, Object> redisTemplate() {
+                RedisTemplate<String, Object> template = new RedisTemplate<>();
+                template.setConnectionFactory(jedisConnectionFactory());
+                return template;
+            } 
+         
+
 
 }

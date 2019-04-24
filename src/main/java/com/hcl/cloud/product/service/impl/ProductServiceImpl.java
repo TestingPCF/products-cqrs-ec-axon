@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
@@ -50,6 +51,22 @@ public class ProductServiceImpl implements ProductService {
 		this.repository = repository;
 	}
 
+	private ProductCacheManager productCacheManager;
+	
+	/**
+     * @param productCacheManager  to set
+     */
+    public void setProductCacheManager(ProductCacheManager productCacheManager) {
+        this.productCacheManager = productCacheManager;
+    }
+
+    ProductServiceImpl(){}
+	
+	@Autowired
+	public ProductServiceImpl(ProductCacheManager productCacheManager) {
+		this.productCacheManager = productCacheManager;
+	}
+
 	@Autowired
 	HystrixCommandPropertyResource hystrixCommandProp;
 	static Logger log = LoggerFactory.getLogger(ProductController.class);
@@ -69,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
 
 				// inventory call for initial product quantity as 0.
 
-				RestTemplate restTemplate = new RestTemplate();
+				/*RestTemplate restTemplate = new RestTemplate();
 				final String url = "http://Inventory-MS-soppy-weathering.apps.cnpsandbox.dryice01.in.hclcnlabs.com/api/inventory";
 				URI uri = new URI(url);
 				HttpHeaders requestHeaders = new HttpHeaders();
@@ -81,9 +98,12 @@ public class ProductServiceImpl implements ProductService {
 				HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
 				ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
 						InventoryQuantityRes.class);
-				if (responseEntity != null) {
+				if (responseEntity != null) {*/
+				    log.info("Product created successfully putting into cache");
+					// If product created successfully put it in cache for future use
+					productCacheManager.cacheProductDetails(createproductReq);
 					createproductReq.setStatus(SUCCESS);
-				}
+				//}
 			} else {
 				createproductReq.setStatus(env.getProperty(ALREADY));
 			}
@@ -110,6 +130,8 @@ public class ProductServiceImpl implements ProductService {
 					product.get().setIs_deleted(true);
 					createproductReq = repository.save(product.get());
 					createproductReq.setStatus(SUCCESS);
+					// After successful deletion of product remove it from cache
+					productCacheManager.removeProductFromCache(createproductReq);
 				} else {
 					createproductReq.setStatus(ALREADY);
 				}
@@ -175,11 +197,19 @@ public class ProductServiceImpl implements ProductService {
 		List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
 		if (null != skuCode) {
 			try {
-
-				Optional<CreateproductReq> product = repository.findById(skuCode);
-				if (product.isPresent()) {
-					productList.add(product.get());
+				// try to get product from cache
+				CreateproductReq cachedProduct = productCacheManager.getProductFromCache(skuCode);
+				if (cachedProduct != null) {
+					log.info("Found product from cache. Returning !!!!");
+					productList.add(cachedProduct);
+				} else {
+					log.info("Could not found product from cahce. Going to fetch from DB now !!!!");
+					Optional<CreateproductReq> product = repository.findById(skuCode);
+					if (product.isPresent()) {
+						productList.add(product.get());
+					}
 				}
+
 			} catch (Exception e) {
 				log.error("Error occured during view Product detail");
 				throw new ProductException(e.getMessage());

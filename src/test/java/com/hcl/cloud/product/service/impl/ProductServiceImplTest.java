@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
 
+import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
 import com.hcl.cloud.product.request.CreateproductReq;
@@ -124,6 +125,9 @@ public class ProductServiceImplTest {
 		env = Mockito.mock(Environment.class);
 		productService.setRepository(repository);
 		when(repository.findById("ABC")).thenReturn(productRequest);
+		
+		ProductCacheManager productCacheManager = Mockito.mock(ProductCacheManager.class);
+		productService.setProductCacheManager(productCacheManager);
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
 		String skuCode = "ABC";
 		List<CreateproductReq> returnList = productService.viewproductbyskuCode(skuCode, env);
@@ -248,7 +252,8 @@ public class ProductServiceImplTest {
 		productService.setRepository(repository);
 		when(repository.findById("ABC")).thenReturn(productRequest);
 		when(repository.save(createproductReq)).thenReturn(createproductReq);
-
+		ProductCacheManager productCacheManager = Mockito.mock(ProductCacheManager.class);
+	    productService.setProductCacheManager(productCacheManager);
 		DeleteproductReq deleteproductReq = new DeleteproductReq();
 		deleteproductReq.setSkuCode("ABC");
 		CreateproductReq response = productService.deleteProduct(deleteproductReq, env);
@@ -262,7 +267,6 @@ public class ProductServiceImplTest {
 		createproductReq.setSkuCode("ABC");
 		// createproductReq.setStatus("success");
 		createproductReq.setIs_deleted(false);
-
 		TransactionBean txBean = new TransactionBean();
 		txBean.setAccessToken("gasfdghsaf");
 		ProductRepository repository = Mockito.mock(ProductRepository.class);

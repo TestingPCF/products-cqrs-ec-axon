@@ -1,5 +1,7 @@
 package com.hcl.cloud.product.request;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -14,9 +16,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 
 @Entity
-public class CreateproductReq {
+public class CreateproductReq  implements Serializable{
 
-	@Id
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    @Id
 	@NotNull
 	private String skuCode = null;
 	@NotNull
@@ -100,5 +106,4 @@ public class CreateproductReq {
 	public void setListPrice(Integer listPrice) {
 		this.listPrice = listPrice;
 	}
-
 }
