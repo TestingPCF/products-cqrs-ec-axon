@@ -5,6 +5,7 @@ applications:
    services: 
      - dbService
      - redisservice
+     - log-drain
    routes:
     - route:  products.apps.cnpsandbox.dryice01.in.hclcnlabs.com  
    instances: 1
