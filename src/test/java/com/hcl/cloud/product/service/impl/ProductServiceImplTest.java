@@ -12,12 +12,18 @@ import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
 
 import com.hcl.cloud.product.cache.ProductCacheManager;
+import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
+import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
 import com.hcl.cloud.product.resources.TransactionBean;
+import com.hcl.cloud.product.response.CreateproductRes;
+import com.hcl.cloud.product.response.InventoryQuantityRes;
+import com.hcl.cloud.product.response.UpdateproductRes;
+import com.hcl.cloud.product.response.ViewproductRes;
 
 public class ProductServiceImplTest {
 
@@ -43,6 +49,25 @@ public class ProductServiceImplTest {
 		createproductReq = productService.createProduct(createproductReq, env, txnBean);
 		assertEquals("ABC", createproductReq.getSkuCode());
 	}
+	
+	@Test(expected=ProductException.class)
+    public void testCreateProductCase2() {
+
+        CreateproductReq createproductReq = new CreateproductReq();
+        createproductReq.setSkuCode("ABC");
+        createproductReq.setStatus("success");
+        Optional<CreateproductReq> productRequest = Optional.empty();
+        TransactionBean txnBean = new TransactionBean();
+        txnBean.setAccessToken("gasfdghsaf");
+
+        ProductRepository repository = Mockito.mock(ProductRepository.class);
+        env = Mockito.mock(Environment.class);
+        productService.setRepository(repository);
+        when(repository.findById("ABC")).thenReturn(productRequest);
+        when(repository.save(createproductReq)).thenReturn(createproductReq);
+        createproductReq = productService.createProduct(createproductReq, env, txnBean);
+        //assertEquals("ABC", createproductReq.getSkuCode());
+    }
 
 	@Test(expected = ProductException.class)
 	public void testCreateProductExcpetion() throws ProductException {
@@ -131,9 +156,32 @@ public class ProductServiceImplTest {
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
 		String skuCode = "ABC";
 		List<CreateproductReq> returnList = productService.viewproductbyskuCode(skuCode, env);
+		CreateProductResponseTranslator  createProductResponseTranslator = new CreateProductResponseTranslator();
+		createProductResponseTranslator.createproductresponsetranslator(createproductReq, env);
 		assertEquals("ABC", returnList.get(0).getSkuCode());
 	}
 
+	@Test()
+    public void testViewProductByskuCodeForCache() throws ProductException {
+
+        CreateproductReq createproductReq = new CreateproductReq();
+        createproductReq.setSkuCode("ABC");
+        createproductReq.setStatus("success");
+        Optional<CreateproductReq> productRequest = Optional.of(createproductReq);
+        TransactionBean txnBean = new TransactionBean();
+        txnBean.setAccessToken("gasfdghsaf");
+        ProductRepository repository = Mockito.mock(ProductRepository.class);
+        env = Mockito.mock(Environment.class);
+        productService.setRepository(repository);
+        when(repository.findById("ABC")).thenReturn(productRequest);
+        ProductCacheManager productCacheManager = Mockito.mock(ProductCacheManager.class);
+        when(productCacheManager.getProductFromCache("ABC")).thenReturn(createproductReq);
+        productService.setProductCacheManager(productCacheManager);
+        String skuCode = "ABC";
+        List<CreateproductReq> returnList = productService.viewproductbyskuCode(skuCode, env);
+        assertEquals("ABC", returnList.get(0).getSkuCode());
+    }
+	
 	@Test(expected = ProductException.class)
 	public void testViewProductByskuCodeException() throws ProductException {
 
@@ -170,6 +218,9 @@ public class ProductServiceImplTest {
 		// when(repository.save(createproductReq)).thenReturn(createproductReq);
 
 		List<CreateproductReq> returnList = productService.viewProducts(env);
+		CreateProductResponseTranslator  createProductResponseTranslator = new CreateProductResponseTranslator();
+		createproductReq.setStatus("fail");
+        createProductResponseTranslator.createproductresponsetranslator(createproductReq, env);
 		assertEquals("ABC", returnList.get(0).getSkuCode());
 	}
 
@@ -288,4 +339,55 @@ public class ProductServiceImplTest {
 		productService.setRepository(repository);
 		productService.deleteProductFallback(deleteproductReq, env);
 	}
+	
+	
+	@Test
+	public void testDeleteTranslatorForAreadyDeleted() {
+	    
+	    CreateproductReq createproductReq = new CreateproductReq();
+        createproductReq.setSkuCode("ABC");
+        env = Mockito.mock(Environment.class);
+        createproductReq.setStatus("already");
+	    DeleteProductResponseTranslator  deleteProductResponseTranslator = new DeleteProductResponseTranslator();
+	    deleteProductResponseTranslator.deleteproductresponseTranslator(createproductReq, env);
+	}
+	@Test
+    public void testDeleteTranslator() {
+        
+        CreateproductReq createproductReq = new CreateproductReq();
+        createproductReq.setSkuCode("ABC");
+        env = Mockito.mock(Environment.class);
+        createproductReq.setStatus("change");
+        DeleteProductResponseTranslator  deleteProductResponseTranslator = new DeleteProductResponseTranslator();
+        deleteProductResponseTranslator.deleteproductresponseTranslator(createproductReq, env);
+    }
+	
+	@Test
+    public void testResponse() {
+        
+       InventoryQuantityRes inventoryQuantityRes = new InventoryQuantityRes();
+       inventoryQuantityRes.setActiveStatus(true);
+       inventoryQuantityRes.setInStock(true);
+       inventoryQuantityRes.setQuantity(2);
+       inventoryQuantityRes.setSkuCode("ABC");
+       inventoryQuantityRes.getQuantity();
+       inventoryQuantityRes.getSkuCode();
+       ViewproductRes viewproductRes = new ViewproductRes();
+       viewproductRes.setStatus("a");
+       viewproductRes.setStatusCode("ABC");
+       viewproductRes.setSkuCode("ABC");
+       viewproductRes.getSkuCode();
+       viewproductRes.getStatus();
+       viewproductRes.getStatusCode();
+       
+       UpdateproductRes updateproductRes = new UpdateproductRes();
+       updateproductRes.getSkuCode();
+       updateproductRes.getStatus();
+       updateproductRes.getStatusCode();
+       CreateproductRes createproductRes = new CreateproductRes();
+       createproductRes.getSkuCode();
+       createproductRes.getStatus();
+       createproductRes.getStatusCode();
+	}
+	
 }
