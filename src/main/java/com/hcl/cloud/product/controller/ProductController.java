@@ -153,7 +153,7 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.GET, value = VIEW_PRODUCT_BYSKUCODE_URI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProductBySkuCode(
-            @RequestHeader(value = ACCESS_TOKEN)  String accessToken,
+            @RequestHeader(value = ACCESS_TOKEN, required = true) String accessToken,
             @PathVariable(SKU_CODE) String skuCode) throws ProductException {
         log.info("viewProductBySkuCode call start");
         ViewProductbySkuCodeResponseTranslator vpt = new ViewProductbySkuCodeResponseTranslator();
@@ -180,8 +180,8 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProducts(
-            @RequestHeader(value = ACCESS_TOKEN) String accessToken) throws ProductException {
-        log.info("viewProducts call start");
+            @RequestHeader(value = ACCESS_TOKEN, required = true) String accessToken) throws ProductException {
+        log.info("viewProducts call start"); 
         log.info("accessToken"+ accessToken);
         ViewProductsResponseTranslator vproductst = new ViewProductsResponseTranslator();
         ViewproductRes viewproductRes = null;
