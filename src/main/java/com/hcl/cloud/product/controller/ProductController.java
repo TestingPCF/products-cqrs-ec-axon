@@ -1,5 +1,6 @@
 package com.hcl.cloud.product.controller;
 
+import static com.hcl.cloud.product.constants.ProductConstants.ACCESS_TOKEN;
 import static com.hcl.cloud.product.constants.ProductConstants.PRODUCT_URI;
 import static com.hcl.cloud.product.constants.ProductConstants.SKU_CODE;
 import static com.hcl.cloud.product.constants.ProductConstants.VIEW_PRODUCT_BYSKUCODE_URI;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +67,7 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateproductRes> createProduct(
-             String accessToken,
+            @RequestHeader(value = ACCESS_TOKEN) String accessToken,
             @Valid @RequestBody CreateproductReq createproductReq) throws ProductException {
 
         log.info("createProduct call start");
@@ -96,7 +98,7 @@ public class ProductController {
 
     @RequestMapping(method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeleteproductRes> deleteProduct(
-             String accessToken,
+            @RequestHeader(value = ACCESS_TOKEN) String accessToken,
             @Valid @RequestBody DeleteproductReq deleteproductReq) throws ProductException {
         log.info("deleteProduct call start");
         CreateproductReq createproductReq = null;
@@ -123,7 +125,7 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateproductRes> updateProduct(
-             String accessToken,
+            @RequestHeader(value = ACCESS_TOKEN) String accessToken,
             @Valid @RequestBody UpdateproductReq updateproductReq) {
         log.info("updateProduct call start");
         CreateproductReq createproductReq = null;
@@ -151,7 +153,7 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.GET, value = VIEW_PRODUCT_BYSKUCODE_URI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProductBySkuCode(
-             String accessToken,
+            @RequestHeader(value = ACCESS_TOKEN)  String accessToken,
             @PathVariable(SKU_CODE) String skuCode) throws ProductException {
         log.info("viewProductBySkuCode call start");
         ViewProductbySkuCodeResponseTranslator vpt = new ViewProductbySkuCodeResponseTranslator();
@@ -178,7 +180,7 @@ public class ProductController {
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProducts(
-             String accessToken) throws ProductException {
+            @RequestHeader(value = ACCESS_TOKEN) String accessToken) throws ProductException {
         log.info("viewProducts call start");
         log.info("accessToken"+ accessToken);
         ViewProductsResponseTranslator vproductst = new ViewProductsResponseTranslator();
