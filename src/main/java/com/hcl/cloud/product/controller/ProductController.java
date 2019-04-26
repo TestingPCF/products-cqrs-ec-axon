@@ -38,7 +38,7 @@ import com.hcl.cloud.product.service.ProductService;
 /**
  * 
  * @author Brijendra and Kapil
- *
+ * ProductController
  */
 @RestController
 public class ProductController {
@@ -62,7 +62,7 @@ public class ProductController {
      * 
      * @param accessToken
      * @param createproductReq
-     * @return
+     * @return ResponseEntity
      * @throws ProductException
      */
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,7 +92,7 @@ public class ProductController {
      * 
      * @param accessToken
      * @param deleteproductReq
-     * @return
+     * @return ResponseEntity
      * @throws ProductException
      */
 
@@ -121,7 +121,7 @@ public class ProductController {
      * 
      * @param accessToken
      * @param updateproductReq
-     * @return
+     * @return ResponseEntity
      */
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateproductRes> updateProduct(
@@ -148,7 +148,7 @@ public class ProductController {
      * 
      * @param accessToken
      * @param skuCode
-     * @return
+     * @return ResponseEntity
      * @throws ProductException
      */
     @RequestMapping(method = RequestMethod.GET, value = VIEW_PRODUCT_BYSKUCODE_URI, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -175,7 +175,7 @@ public class ProductController {
      * This method is used for view all active products.
      * 
      * @param accessToken
-     * @return
+     * @return ResponseEntity
      * @throws ProductException
      */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

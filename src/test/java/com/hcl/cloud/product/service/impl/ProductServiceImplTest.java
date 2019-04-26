@@ -2,15 +2,12 @@ package com.hcl.cloud.product.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
-
 import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;

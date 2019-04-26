@@ -3,15 +3,12 @@ package com.hcl.cloud.product.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
-
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;

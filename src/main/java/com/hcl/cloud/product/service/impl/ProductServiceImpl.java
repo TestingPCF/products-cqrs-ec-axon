@@ -4,12 +4,10 @@ package com.hcl.cloud.product.service.impl;
 import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
 import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
 import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-
 import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
@@ -38,8 +35,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 /**
  * 
- * @author ProductService
- * ProductServiceImpl
+ * @author Brijendra and Kapil ProductServiceImpl
  *
  */
 @Service
@@ -55,14 +51,18 @@ public class ProductServiceImpl implements ProductService {
     private ProductCacheManager productCacheManager;
 
     /**
-     * @param productCacheManager  to set
+     * @param productCacheManager to set
      */
     public void setProductCacheManager(ProductCacheManager productCacheManager) {
         this.productCacheManager = productCacheManager;
     }
 
-    ProductServiceImpl(){}
+    ProductServiceImpl() {
+    }
 
+    /**
+     * @param productCacheManager
+     */
     @Autowired
     public ProductServiceImpl(ProductCacheManager productCacheManager) {
         this.productCacheManager = productCacheManager;
@@ -72,6 +72,14 @@ public class ProductServiceImpl implements ProductService {
     HystrixCommandPropertyResource hystrixCommandProp;
     static Logger log = LoggerFactory.getLogger(ProductController.class);
 
+    /**
+     * This method is used for create the product.
+     * 
+     * @param accessToken
+     * @param createproductReq
+     * @return CreateproductReq
+     * @throws ProductException
+     */
     @Override
     @HystrixCommand(fallbackMethod = "createProductFallback", commandKey = "CREATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
     public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
@@ -81,7 +89,6 @@ public class ProductServiceImpl implements ProductService {
         try {
 
             Optional<CreateproductReq> product = repository.findById(createproductReq.getSkuCode());
-
             if (!product.isPresent()) {
                 createproductReq = repository.save(createproductReq);
 
@@ -117,6 +124,14 @@ public class ProductServiceImpl implements ProductService {
         return createproductReq;
     }
 
+    /**
+     * This method is used for soft delete product.
+     * 
+     * @param accessToken
+     * @param deleteproductReq
+     * @return CreateproductReq
+     * @throws ProductException
+     */
     @Override
     @HystrixCommand(fallbackMethod = "deleteProductFallback", commandKey = "DELETEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
     public CreateproductReq deleteProduct(DeleteproductReq deleteproductReq, Environment env) throws ProductException {
@@ -150,6 +165,13 @@ public class ProductServiceImpl implements ProductService {
         return createproductReq;
     }
 
+    /**
+     * This method is used for update the product.
+     * 
+     * @param accessToken
+     * @param updateproductReq
+     * @return CreateproductReq
+     */
     @Override
     public CreateproductReq updateProduct(UpdateproductReq updateproductReq, Environment env) throws ProductException {
         log.info("Product detail update DB call Start");
@@ -192,6 +214,14 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    /**
+     * This method is used for view single entry of active product based on skuCode.
+     * 
+     * @param accessToken
+     * @param skuCode
+     * @return List<CreateproductReq>
+     * @throws ProductException
+     */
     @Override
     public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
         log.info("View ProductBySkuCode DB call start");
@@ -222,6 +252,13 @@ public class ProductServiceImpl implements ProductService {
         return productList;
     }
 
+    /**
+     * This method is used for view all active products.
+     * 
+     * @param accessToken
+     * @return List<CreateproductReq>
+     * @throws ProductException
+     */
     @Override
     public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
         log.info("View Products DB call start");
