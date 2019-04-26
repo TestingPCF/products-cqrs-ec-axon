@@ -119,6 +119,20 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.2</version>
+				                           <!-- for excluding Bean from Junit report -->
+				                           <configuration>
+                                  <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                                  <excludes>
+                                         <exclude>**/com/hcl/cloud/product/bean/**/*</exclude>
+                                         <exclude>**/com/hcl/cloud/product/constants/**/*</exclude>
+                                         <exclude>**/com/hcl/cloud/product/exception/**/*</exclude>
+                                           <exclude>**/com/hcl/cloud/product/config/**/*</exclude>
+                                             <exclude>**/com/hcl/cloud/product/resources/**/*</exclude>
+                                              <exclude>**/com/hcl/cloud/product/cache/**/*</exclude>
+                                  </excludes>
+                           </configuration>
+				 <!--  excluding Bean from Junit report end -->
+				                         
 				<executions>
 					<execution>
 						<goals>
@@ -133,10 +147,11 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+					
 				</executions>
 			</plugin>
 
-			<!-- <plugin>
+			<!--  <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<executions>
@@ -154,14 +169,18 @@
 						</goals>
 					</execution>
 				</executions>
+								<configuration>
+				 <configLocation>${basedir}/customcheckstyle-checker.xml</configLocation>			
+				</configuration>
+				
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 				<configuration>
-					<analysisCache>true</analysisCache> enable incremental analysis
-					<analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation> Optional: points to this location by default
-					<failOnViolation>true</failOnViolation> this is actually true by default, but can be disabled
+					<analysisCache>true</analysisCache> 
+					<analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation> 
+					<failOnViolation>true</failOnViolation>
 					<printFailingErrors>true</printFailingErrors>
 				</configuration>
 				<executions>
@@ -171,7 +190,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin> -->
+			</plugin>  -->
 		</plugins>
 	</build>
 
