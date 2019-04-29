@@ -1,11 +1,13 @@
 package com.hcl.cloud.product.controller;
 
 import static com.hcl.cloud.product.constants.ProductConstants.ACCESS_TOKEN;
-import static com.hcl.cloud.product.constants.ProductConstants.PRODUCT_URI;
 import static com.hcl.cloud.product.constants.ProductConstants.SKU_CODE;
 import static com.hcl.cloud.product.constants.ProductConstants.VIEW_PRODUCT_BYSKUCODE_URI;
+
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.UpdateProductResponseTranslator;
@@ -122,11 +125,12 @@ public class ProductController {
      * @param accessToken
      * @param updateproductReq
      * @return ResponseEntity
+     * @throws ProductException 
      */
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateproductRes> updateProduct(
             @RequestHeader(value = ACCESS_TOKEN) String accessToken,
-            @Valid @RequestBody UpdateproductReq updateproductReq) {
+            @Valid @RequestBody UpdateproductReq updateproductReq) throws ProductException {
         log.info("updateProduct call start");
         CreateproductReq createproductReq = null;
         UpdateproductRes updateproductRes = null;

@@ -29,7 +29,7 @@ public class ProductServiceImplTest {
 	Environment env;
 
 	@Test()
-	public void testCreateProduct() {
+	public void testCreateProduct() throws ProductException {
 
 		CreateproductReq createproductReq = new CreateproductReq();
 		createproductReq.setSkuCode("ABC");
@@ -48,7 +48,7 @@ public class ProductServiceImplTest {
 	}
 	
 	@Test(expected=ProductException.class)
-    public void testCreateProductCase2() {
+    public void testCreateProductCase2() throws ProductException {
 
         CreateproductReq createproductReq = new CreateproductReq();
         createproductReq.setSkuCode("ABC");
@@ -339,7 +339,7 @@ public class ProductServiceImplTest {
 	
 	
 	@Test
-	public void testDeleteTranslatorForAreadyDeleted() {
+	public void testDeleteTranslatorForAreadyDeleted() throws ProductException {
 	    
 	    CreateproductReq createproductReq = new CreateproductReq();
         createproductReq.setSkuCode("ABC");
@@ -349,7 +349,7 @@ public class ProductServiceImplTest {
 	    deleteProductResponseTranslator.deleteproductresponseTranslator(createproductReq, env);
 	}
 	@Test
-    public void testDeleteTranslator() {
+    public void testDeleteTranslator() throws ProductException {
         
         CreateproductReq createproductReq = new CreateproductReq();
         createproductReq.setSkuCode("ABC");

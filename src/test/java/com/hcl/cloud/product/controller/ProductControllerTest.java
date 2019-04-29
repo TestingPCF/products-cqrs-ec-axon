@@ -163,7 +163,7 @@ public class ProductControllerTest {
 	}
 	
 	@Test
-	public void testViewProductBySkuCode() {
+	public void testViewProductBySkuCode() throws ProductException {
 
 		String skuCode="ABC";
 		ProductService productService = Mockito.mock(ProductServiceImpl.class);
@@ -182,7 +182,7 @@ public class ProductControllerTest {
 	}
 	
 	@Test(expected=ProductException.class)
-	public void testViewProductBySkuCodeException() {
+	public void testViewProductBySkuCodeException() throws ProductException {
 
 		String skuCode="ABC";
 		ProductService productService = Mockito.mock(ProductServiceImpl.class);
@@ -201,7 +201,7 @@ public class ProductControllerTest {
 	
 	
 	@Test
-	public void testViewProducts() {
+	public void testViewProducts() throws ProductException {
 
 		//String skuCode="ABC";
 		ProductService productService = Mockito.mock(ProductServiceImpl.class);
