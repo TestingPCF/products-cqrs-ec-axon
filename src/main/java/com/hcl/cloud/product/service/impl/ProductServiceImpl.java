@@ -4,10 +4,12 @@ package com.hcl.cloud.product.service.impl;
 import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
 import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
 import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+
 import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
@@ -89,13 +92,15 @@ public class ProductServiceImpl implements ProductService {
         try {
 
             Optional<CreateproductReq> product = repository.findById(createproductReq.getSkuCode());
+
             if (!product.isPresent()) {
+
                 createproductReq = repository.save(createproductReq);
 
                 // inventory call for initial product quantity as 0.
 
                 RestTemplate restTemplate = new RestTemplate();
-                final String url = "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
+                final String url = "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory-test";
                 URI uri = new URI(url);
                 HttpHeaders requestHeaders = new HttpHeaders();
                 requestHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
@@ -111,9 +116,9 @@ public class ProductServiceImpl implements ProductService {
                     // If product created successfully put it in cache for future use
                     productCacheManager.cacheProductDetails(createproductReq);
                     createproductReq.setStatus(SUCCESS);
+                } else {
+                    createproductReq.setStatus(env.getProperty(ALREADY));
                 }
-            } else {
-                createproductReq.setStatus(env.getProperty(ALREADY));
             }
             log.info("Product created successfully");
         } catch (Exception ex) {
@@ -173,6 +178,7 @@ public class ProductServiceImpl implements ProductService {
      * @return CreateproductReq
      */
     @Override
+    @HystrixCommand(fallbackMethod = "updateProductFallback", commandKey = "UPDATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
     public CreateproductReq updateProduct(UpdateproductReq updateproductReq, Environment env) throws ProductException {
         log.info("Product detail update DB call Start");
         CreateproductReq createproductReq = new CreateproductReq();
@@ -223,6 +229,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ProductException
      */
     @Override
+    @HystrixCommand(fallbackMethod = "viewproductbyskuCodeFallback", commandKey = "VIEWPRODUCTBYSKUCODECommand", threadPoolKey = "PRODUCTThreadPool")
     public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
         log.info("View ProductBySkuCode DB call start");
         List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
@@ -260,6 +267,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ProductException
      */
     @Override
+    @HystrixCommand(fallbackMethod = "viewProductsFallback", commandKey = "VIEWPRODUCTSCommand", threadPoolKey = "PRODUCTThreadPool")
     public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
         log.info("View Products DB call start");
         List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
@@ -295,6 +303,25 @@ public class ProductServiceImpl implements ProductService {
         log.error("Exception occured during find Product moved to Hystrix fallback");
         throw new ProductException(env.getProperty("hystrix.fallback"));
 
+    }
+    
+    public CreateproductReq updateProductFallback(UpdateproductReq updateproductReq, Environment env)
+            throws ProductException {
+        log.error("Exception occured during update Product moved to Hystrix fallback");
+        throw new ProductException(env.getProperty("hystrix.fallback"));
+
+    }
+    
+    public List<CreateproductReq> viewproductbyskuCodeFallback(String skuCode, Environment env) 
+            throws ProductException{
+        log.error("Exception occured during view Product moved to Hystrix fallback");
+        throw new ProductException(env.getProperty("hystrix.fallback"));
+    }
+    
+    public List<CreateproductReq> viewProductsFallback(Environment env) 
+            throws ProductException {
+        log.error("Exception occured during view Products moved to Hystrix fallback");
+        throw new ProductException(env.getProperty("hystrix.fallback"));
     }
 
     /*
