@@ -37,8 +37,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ProductException.class)
     public final ResponseEntity<ErrorDetails> handleException(ProductException ex) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getCause().getMessage(),
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
                 String.valueOf(HttpStatus.NOT_FOUND.value()));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }
