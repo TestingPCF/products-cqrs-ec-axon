@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ProductException
      */
     @Override
-    @HystrixCommand(fallbackMethod = "createProductFallback", commandKey = "CREATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
+    @HystrixCommand(fallbackMethod = "createProductFallback",commandKey = "CREATEPRODUCTCommand", threadPoolKey = "PRODUCTThreadPool")
     public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
             throws ProductException {
 

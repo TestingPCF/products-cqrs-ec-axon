@@ -290,7 +290,6 @@ public class ProductServiceImplTest {
 
 		CreateproductReq createproductReq = new CreateproductReq();
 		createproductReq.setSkuCode("ABC");
-		// createproductReq.setStatus("success");
 		createproductReq.setIs_deleted(false);
 		Optional<CreateproductReq> productRequest = Optional.of(createproductReq);
 		TransactionBean txnBean = new TransactionBean();
@@ -313,8 +312,7 @@ public class ProductServiceImplTest {
 
 		CreateproductReq createproductReq = new CreateproductReq();
 		createproductReq.setSkuCode("ABC");
-		// createproductReq.setStatus("success");
-		createproductReq.setIs_deleted(false);
+	    createproductReq.setIs_deleted(false);
 		TransactionBean txBean = new TransactionBean();
 		txBean.setAccessToken("gasfdghsaf");
 		ProductRepository repository = Mockito.mock(ProductRepository.class);
@@ -328,7 +326,6 @@ public class ProductServiceImplTest {
 
 		DeleteproductReq deleteproductReq = new DeleteproductReq();
 		deleteproductReq.setSkuCode("ABC");
-		// createproductReq.setStatus("success");
 		TransactionBean txBean = new TransactionBean();
 		txBean.setAccessToken("gasfdghsaf");
 		ProductRepository repository = Mockito.mock(ProductRepository.class);
@@ -336,6 +333,44 @@ public class ProductServiceImplTest {
 		productService.setRepository(repository);
 		productService.deleteProductFallback(deleteproductReq, env);
 	}
+	
+	@Test(expected = ProductException.class)
+    public void testUpdateFallBack() throws ProductException {
+
+	    UpdateproductReq updateproductReq = new UpdateproductReq();
+	    updateproductReq.setSkuCode("ABC");
+	    updateproductReq.setCategory("mobie");
+	    updateproductReq.setListPrice(20000);
+	    updateproductReq.setSalePrice(18000);
+	    updateproductReq.setProductName("VIVO Mobile");
+	    updateproductReq.setProductDescrition("Test Mobile");
+        TransactionBean txBean = new TransactionBean();
+        txBean.setAccessToken("gasfdghsaf");
+        ProductRepository repository = Mockito.mock(ProductRepository.class);
+        env = Mockito.mock(Environment.class);
+        productService.setRepository(repository);
+        productService.updateProductFallback(updateproductReq, env);
+    }
+	
+	@Test(expected = ProductException.class)
+    public void testviewproductbyskuCodeFallback() throws ProductException {
+
+        String skucode = "ABC";
+        ProductRepository repository = Mockito.mock(ProductRepository.class);
+        env = Mockito.mock(Environment.class);
+        productService.setRepository(repository);
+        productService.viewproductbyskuCodeFallback(skucode, env);
+    }
+	
+	@Test(expected = ProductException.class)
+    public void testviewProductsFallback() throws ProductException {
+
+        //String skucode = "ABC";
+        ProductRepository repository = Mockito.mock(ProductRepository.class);
+        env = Mockito.mock(Environment.class);
+        productService.setRepository(repository);
+        productService.viewProductsFallback(env);
+    }
 	
 	
 	@Test
