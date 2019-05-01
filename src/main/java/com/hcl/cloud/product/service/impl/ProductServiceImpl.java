@@ -183,6 +183,7 @@ public class ProductServiceImpl implements ProductService {
             }
             product.get().setIs_deleted(updateproductReq.isIs_deleted());
             createproductReq = repository.save(product.get());
+            productCacheManager.cacheProductDetails(createproductReq);
             createproductReq.setStatus(SUCCESS);
         } else {
             createproductReq.setStatus(ALREADY);
