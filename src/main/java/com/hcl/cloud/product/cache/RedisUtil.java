@@ -19,7 +19,7 @@ public class RedisUtil<T> {
     private ValueOperations<String, T> valueOperations;
 
     @Autowired
-    RedisUtil(RedisTemplate<String, T> redisTemplate) {
+    public RedisUtil(RedisTemplate<String, T> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperation = redisTemplate.opsForHash();
         this.listOperation = redisTemplate.opsForList();
