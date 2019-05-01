@@ -251,8 +251,7 @@ public class ProductServiceImpl implements ProductService {
             throws ProductException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = null;
-        final String url = "dasdasf";
-        // "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory-test";
+        final String url = "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
         try {
             uri = new URI(url);
         } catch (URISyntaxException ex) {
