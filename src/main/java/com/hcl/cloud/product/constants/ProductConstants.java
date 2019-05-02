@@ -17,5 +17,9 @@ public class ProductConstants {
     public static final String SUCCESS = "success";
     public static final String FAILED = "failed";
     public static final String ALREADY = "already";
+    public static final String PROP_VAL_PATTERN = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+    public static final String THREAD_POOL_IDENTIFIER = "ThreadPool.";
+    public static final String COMMAND_KEY_IDENTIFIER = "Command.";
+    public static final String COLLAPSER = "Collapser";
 
 }

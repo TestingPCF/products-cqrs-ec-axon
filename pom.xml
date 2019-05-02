@@ -7,7 +7,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.4.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath />
 	</parent>
 	<groupId>com.hcl.cloud</groupId>
 	<artifactId>product</artifactId>
@@ -18,12 +18,10 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
-       <!--   <maven.test.skip>true</maven.test.skip> -->
 	</properties>
 
 	<dependencies>
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-mongodb</artifactId> 
-			</dependency> -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -36,7 +34,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -65,12 +62,10 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.9.5</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -79,8 +74,6 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
-		
-	<!-- Added for redis caching -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
@@ -89,9 +82,7 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 		</dependency>
-		<!-- Redis Dependency ends here --> 
- 
-		
+
 	</dependencies>
 
 
@@ -119,27 +110,27 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.2</version>
-				                           <!-- for excluding Bean from Junit report -->
-				                           <configuration>
-                                  <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                                  <excludes>
-                                         <exclude>**/com/hcl/cloud/product/bean/**/*</exclude>
-                                         <exclude>**/com/hcl/cloud/product/constants/**/*</exclude>
-                                         <exclude>**/com/hcl/cloud/product/exception/**/*</exclude>
-                                           <exclude>**/com/hcl/cloud/product/config/**/*</exclude>
-                                             <exclude>**/com/hcl/cloud/product/resources/**/*</exclude>
-                                              <exclude>**/com/hcl/cloud/product/cache/**/*</exclude>
-                                  </excludes>
-                           </configuration>
-				 <!--  excluding Bean from Junit report end -->
-				                         
+
+				<configuration>
+					<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+					<excludes>
+						<exclude>**/com/hcl/cloud/product/bean/**/*</exclude>
+						<exclude>**/com/hcl/cloud/product/constants/**/*</exclude>
+						<exclude>**/com/hcl/cloud/product/exception/**/*</exclude>
+						<exclude>**/com/hcl/cloud/product/config/**/*</exclude>
+						<exclude>**/com/hcl/cloud/product/resources/**/*</exclude>
+						<exclude>**/com/hcl/cloud/product/cache/**/*</exclude>
+					</excludes>
+				</configuration>
+
+
 				<executions>
 					<execution>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-					<!-- attached to Maven test phase -->
+
 					<execution>
 						<id>report</id>
 						<phase>test</phase>
@@ -147,50 +138,10 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
-					
+
 				</executions>
 			</plugin>
 
-			<!--  <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<phase>validate</phase>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<consoleOutput>true</consoleOutput>
-							<failsOnError>true</failsOnError>
-							<linkXRef>false</linkXRef>
-						</configuration>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-								<configuration>
-				 <configLocation>${basedir}/customcheckstyle-checker.xml</configLocation>			
-				</configuration>
-				
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<configuration>
-					<analysisCache>true</analysisCache> 
-					<analysisCacheLocation>${project.build.directory}/pmd/pmd.cache</analysisCacheLocation> 
-					<failOnViolation>true</failOnViolation>
-					<printFailingErrors>true</printFailingErrors>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>  -->
 		</plugins>
 	</build>
 

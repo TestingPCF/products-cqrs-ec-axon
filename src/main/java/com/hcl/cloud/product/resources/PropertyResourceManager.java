@@ -25,7 +25,7 @@ public class PropertyResourceManager {
             is = this.getClass().getResourceAsStream(fileName);
             prop.load(is);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("File not found",e);
         } catch (IOException e) {
             log.error("Error occured during property file loading", e);
         }
