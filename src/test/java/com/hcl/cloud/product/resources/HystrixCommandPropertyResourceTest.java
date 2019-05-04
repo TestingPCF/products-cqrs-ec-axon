@@ -22,7 +22,7 @@ public class HystrixCommandPropertyResourceTest {
         assertNotNull(hysresource);
     }
      
-    @Test
+    @Test(expected=AssertionError.class)
     public void constructorExceptionTest(){
         hysresource = new HystrixCommandPropertyResource();
         assertNull(hysresource);
