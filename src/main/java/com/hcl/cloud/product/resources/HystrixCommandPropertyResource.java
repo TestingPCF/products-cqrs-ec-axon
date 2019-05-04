@@ -29,8 +29,19 @@ public class HystrixCommandPropertyResource {
         for (Object k : keys) {
             String key = (String) k;
             String value = hystrixProperties.getPropertyValue(key);
-            if (key !=null && value !=null) {
-                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)) {
+            if (value != null) {
+                if (key.contains(COMMAND_KEY_IDENTIFIER)) {
+                    if (value.matches(PROP_VAL_PATTERN)) {
+                        ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
+
+                    } else if ("true".equals(value) || "false".equals(value)) {
+                        ConfigurationManager.getConfigInstance().setProperty(key, Boolean.valueOf(value));
+
+                    } else {
+                        ConfigurationManager.getConfigInstance().setProperty(key, value);
+
+                    }
+                } else if (key.contains(THREAD_POOL_IDENTIFIER)) {
                     if (value.matches(PROP_VAL_PATTERN)) {
                         ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
 
