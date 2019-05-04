@@ -22,7 +22,7 @@ public class HystrixCommandPropertyResource {
 
     static Logger log = LoggerFactory.getLogger(HystrixCommandPropertyResource.class);
 
-    public HystrixCommandPropertyResource(String propertyfile) {
+    public HystrixCommandPropertyResource() {
 
         PropertyResourceManager hystrixProperties = new PropertyResourceManager("/HystrixCommand.properties");
         Set<Object> keys = hystrixProperties.getAllKeys();
@@ -30,7 +30,7 @@ public class HystrixCommandPropertyResource {
             String key = (String) k;
             String value = hystrixProperties.getPropertyValue(key);
             if (value != null) {
-                if (key.contains(COMMAND_KEY_IDENTIFIER)) {
+                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)) {
                     if (value.matches(PROP_VAL_PATTERN)) {
                         ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
 
@@ -41,17 +41,9 @@ public class HystrixCommandPropertyResource {
                         ConfigurationManager.getConfigInstance().setProperty(key, value);
 
                     }
-                } else if (key.contains(THREAD_POOL_IDENTIFIER)) {
-                    if (value.matches(PROP_VAL_PATTERN)) {
-                        ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
-
-                    } else if ("true".equals(value) || "false".equals(value)) {
-                        ConfigurationManager.getConfigInstance().setProperty(key, Boolean.valueOf(value));
-
-                    } else {
-                        ConfigurationManager.getConfigInstance().setProperty(key, value);
-
-                    }
+                }else
+                {
+                    ConfigurationManager.getConfigInstance().setProperty(key, value);
                 }
             }
         }
