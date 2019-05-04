@@ -1,6 +1,5 @@
 package com.hcl.cloud.product.resources;
 
-import static com.hcl.cloud.product.constants.ProductConstants.COLLAPSER;
 import static com.hcl.cloud.product.constants.ProductConstants.COMMAND_KEY_IDENTIFIER;
 import static com.hcl.cloud.product.constants.ProductConstants.PROP_VAL_PATTERN;
 import static com.hcl.cloud.product.constants.ProductConstants.THREAD_POOL_IDENTIFIER;
@@ -31,8 +30,7 @@ public class HystrixCommandPropertyResource {
             String key = (String) k;
             String value = hystrixProperties.getPropertyValue(key);
             if (value != null) {
-                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)
-                        || key.contains(COLLAPSER)) {
+                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)) {
                     if (value.matches(PROP_VAL_PATTERN)) {
                         ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
 
