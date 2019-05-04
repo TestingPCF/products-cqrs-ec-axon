@@ -30,7 +30,6 @@ import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
 import com.hcl.cloud.product.request.InventoryQuantityReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
-import com.hcl.cloud.product.resources.HystrixCommandPropertyResource;
 import com.hcl.cloud.product.resources.TransactionBean;
 import com.hcl.cloud.product.response.CreateproductRes;
 import com.hcl.cloud.product.response.DeleteproductRes;
@@ -45,7 +44,7 @@ public class ProductServiceImplTest {
     RedisUtil<CreateproductReq> redisUtil = new RedisUtil<CreateproductReq>(redisTemplate);
     ProductCacheManagerImpl productCacheManager = new ProductCacheManagerImpl(redisUtil);
     Environment env;
-    HystrixCommandPropertyResource hystrixCommandProp = new HystrixCommandPropertyResource();
+    //HystrixCommandPropertyResource hystrixCommandProp = new HystrixCommandPropertyResource();
 
     @Test()
     public void testCreateProduct() throws ProductException {
