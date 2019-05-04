@@ -290,26 +290,26 @@ public class ProductServiceImpl implements ProductService {
     public CreateproductReq deleteProductFallback(DeleteproductReq deleteproductReq, Environment env)
             throws ProductException {
         log.error("Exception occured during find Product moved to Hystrix fallback");
-        throw new ProductException(env.getProperty("hystrix.fallback"));
+        throw new ProductException(env.getProperty("delete.fallback"));
 
     }
 
     public CreateproductReq updateProductFallback(UpdateproductReq updateproductReq, Environment env)
             throws ProductException {
         log.error("Exception occured during update Product moved to Hystrix fallback");
-        throw new ProductException(env.getProperty("hystrix.fallback"));
+        throw new ProductException(env.getProperty("update.fallback."));
 
     }
 
     public List<CreateproductReq> viewproductbyskuCodeFallback(String skuCode, Environment env)
             throws ProductException {
         log.error("Exception occured during view Product moved to Hystrix fallback");
-        throw new ProductException(env.getProperty("hystrix.fallback"));
+        throw new ProductException(env.getProperty("viewbycode.fallback"));
     }
 
     public List<CreateproductReq> viewProductsFallback(Environment env) throws ProductException {
         log.error("Exception occured during view Products moved to Hystrix fallback");
-        throw new ProductException(env.getProperty("hystrix.fallback"));
+        throw new ProductException(env.getProperty("viewall.fallback"));
     }
 
     /*
