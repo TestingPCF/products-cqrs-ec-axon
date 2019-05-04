@@ -4,6 +4,7 @@
 package com.hcl.cloud.product.resources;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -21,10 +22,10 @@ public class HystrixCommandPropertyResourceTest {
         assertNotNull(hysresource);
     }
      
-    @Test(expected = Exception.class)
+    @Test
     public void constructorExceptionTest(){
         hysresource = new HystrixCommandPropertyResource();
-        assertNotNull(hysresource);
+        assertNull(hysresource);
     }
 
 }
