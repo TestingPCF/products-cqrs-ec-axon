@@ -8,6 +8,6 @@ applications:
      - log-drain
      - newrelic
    routes:
-    - route:  products.apps.cnpsandbox.dryice01.in.hclcnlabs.com  
+    - route:  products.apps.sandbox.cflab01.in.hclcnlabs.com  
    instances: 1
    memory: 750M
