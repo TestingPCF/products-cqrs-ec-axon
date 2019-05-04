@@ -18,7 +18,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
-		<sonar.exclusions>**/com/hcl/cloud/product/resources/**/*</sonar.exclusions>
+		<sonar.exclusions>**/com/hcl/cloud/product/resources/*.java</sonar.exclusions>
    </properties>
 
 	<dependencies>
