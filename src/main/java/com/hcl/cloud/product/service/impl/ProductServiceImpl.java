@@ -4,6 +4,7 @@ package com.hcl.cloud.product.service.impl;
 import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
 import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
 import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
+import static com.hcl.cloud.product.constants.ProductConstants.INVENTORY_URL;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -252,7 +253,7 @@ public class ProductServiceImpl implements ProductService {
             throws ProductException {
         RestTemplate restTemplate = new RestTemplate();
         URI uri = null;
-        final String url = "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
+        final String url = INVENTORY_URL;
         try {
             uri = new URI(url);
         } catch (URISyntaxException ex) {
