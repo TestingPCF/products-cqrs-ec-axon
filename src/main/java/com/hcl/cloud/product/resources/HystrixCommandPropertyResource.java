@@ -30,7 +30,7 @@ public class HystrixCommandPropertyResource {
             String key = (String) k;
             String value = hystrixProperties.getPropertyValue(key);
             if (value != null) {
-                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)) {
+                if ((key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER))) {
                     if (value.matches(PROP_VAL_PATTERN)) {
                         ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
 
