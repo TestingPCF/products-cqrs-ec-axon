@@ -22,15 +22,15 @@ public class HystrixCommandPropertyResource {
 
     static Logger log = LoggerFactory.getLogger(HystrixCommandPropertyResource.class);
 
-    public HystrixCommandPropertyResource() {
+    public HystrixCommandPropertyResource(String propertyfile) {
 
         PropertyResourceManager hystrixProperties = new PropertyResourceManager("/HystrixCommand.properties");
         Set<Object> keys = hystrixProperties.getAllKeys();
         for (Object k : keys) {
             String key = (String) k;
             String value = hystrixProperties.getPropertyValue(key);
-            if (value != null) {
-                if ((key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER))) {
+            if (key !=null && value !=null) {
+                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)) {
                     if (value.matches(PROP_VAL_PATTERN)) {
                         ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
 
