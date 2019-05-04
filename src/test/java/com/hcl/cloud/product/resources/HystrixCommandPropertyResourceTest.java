@@ -21,13 +21,13 @@ public class HystrixCommandPropertyResourceTest {
 
     @Test
     public void constructorTest() {
-        hysresource = new HystrixCommandPropertyResource("");
+        hysresource = new HystrixCommandPropertyResource();
         assertNotNull(hysresource);
     }
 
     @Test(expected = AssertionError.class)
     public void constructorExceptionTest() {
-        hysresource = new HystrixCommandPropertyResource("");
+        hysresource = new HystrixCommandPropertyResource();
         assertNull(hysresource);
     }
 
