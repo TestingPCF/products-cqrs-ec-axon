@@ -23,7 +23,7 @@ public class HystrixCommandPropertyResource {
 
     static Logger log = LoggerFactory.getLogger(HystrixCommandPropertyResource.class);
 
-     public HystrixCommandPropertyResource() {
+    public HystrixCommandPropertyResource() {
 
         PropertyResourceManager hystrixProperties = new PropertyResourceManager("/HystrixCommand.properties");
         Set<Object> keys = hystrixProperties.getAllKeys();
@@ -44,7 +44,7 @@ public class HystrixCommandPropertyResource {
 
                     }
                 }
-            } 
+            }
         }
     }
 }
