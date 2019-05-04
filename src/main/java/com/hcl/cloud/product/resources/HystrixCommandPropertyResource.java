@@ -44,9 +44,7 @@ public class HystrixCommandPropertyResource {
 
                     }
                 }
-            } else {
-                log.info("HystrixCommand.properties having the null value for key.The key is:" + key);
-            }
+            } 
         }
     }
 }

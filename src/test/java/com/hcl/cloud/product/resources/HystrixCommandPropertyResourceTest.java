@@ -29,30 +29,6 @@ public class HystrixCommandPropertyResourceTest {
     @Test
     public void constructorTest(){
         hysresource = new HystrixCommandPropertyResource();
-        
-        PropertyResourceManager hystrixProperties = new PropertyResourceManager("/HystrixCommand.properties");
-       // Set<Object> keys = hystrixProperties.getAllKeys();
-        /* for (Object k : keys) { */
-            String key = "CREATEPRODUCTCommand";
-            String value = hystrixProperties.getPropertyValue(key);
-            if (value != null) {
-                if (key.contains(COMMAND_KEY_IDENTIFIER) || key.contains(THREAD_POOL_IDENTIFIER)
-                        || key.contains(COLLAPSER)) {
-                    if (value.matches(PROP_VAL_PATTERN)) {
-                        ConfigurationManager.getConfigInstance().setProperty(key, Long.valueOf(value));
-
-                    } else if ("true".equals(value) || "false".equals(value)) {
-                        ConfigurationManager.getConfigInstance().setProperty(key, Boolean.valueOf(value));
-
-                    } else {
-                        ConfigurationManager.getConfigInstance().setProperty(key, value);
-
-                    }
-                }
-            } else {
-                log.info("HystrixCommand.properties having the null value for key.The key is:" + key);
-            }
-        /* } */
         assertNotNull(hysresource);
     }
      
