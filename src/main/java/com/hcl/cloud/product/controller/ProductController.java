@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +39,11 @@ import com.hcl.cloud.product.response.ViewproductRes;
 import com.hcl.cloud.product.service.ProductService;
 
 /**
- *
+ * 
  * @author Brijendra and Kapil
  * ProductController
  */
 @RestController
-@RefreshScope
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -64,7 +62,7 @@ public class ProductController {
 
     /**
      * This method is used for create the product.
-     *
+     * 
      * @param accessToken
      * @param createproductReq
      * @return ResponseEntity
@@ -94,7 +92,7 @@ public class ProductController {
 
     /**
      * This method is used for soft delete product.
-     *
+     * 
      * @param accessToken
      * @param deleteproductReq
      * @return ResponseEntity
@@ -123,11 +121,11 @@ public class ProductController {
 
     /**
      * This method is used for update the product.
-     *
+     * 
      * @param accessToken
      * @param updateproductReq
      * @return ResponseEntity
-     * @throws ProductException
+     * @throws ProductException 
      */
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UpdateproductRes> updateProduct(
@@ -151,7 +149,7 @@ public class ProductController {
 
     /**
      * This method is used for view single entry of active product based on skuCode.
-     *
+     * 
      * @param accessToken
      * @param skuCode
      * @return ResponseEntity
@@ -179,7 +177,7 @@ public class ProductController {
 
     /**
      * This method is used for view all active products.
-     *
+     * 
      * @param accessToken
      * @return ResponseEntity
      * @throws ProductException
@@ -187,7 +185,7 @@ public class ProductController {
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProducts(
             @RequestHeader(value = ACCESS_TOKEN, required = true) String accessToken) throws ProductException {
-        log.info("viewProducts call start");
+        log.info("viewProducts call start"); 
         log.info("accessToken"+ accessToken);
         ViewProductsResponseTranslator vproductst = new ViewProductsResponseTranslator();
         ViewproductRes viewproductRes = null;
