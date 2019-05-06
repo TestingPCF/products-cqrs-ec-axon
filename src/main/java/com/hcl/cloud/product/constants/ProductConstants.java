@@ -21,6 +21,7 @@ public class ProductConstants {
     public static final String THREAD_POOL_IDENTIFIER = "ThreadPool.";
     public static final String COMMAND_KEY_IDENTIFIER = "Command.";
     public static final String COLLAPSER = "Collapser";
-    public static final String INVENTORY_URL = "http://inventory.apps.cnpsandbox.dryice01.in.hclcnlabs.com/inventory";
+    public static final String INVENTORY_URL = "http://inventory.apps.sandbox.cflab01.in.hclcnlabs.com/inventory";
+            
 
 }
