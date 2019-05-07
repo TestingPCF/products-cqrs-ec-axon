@@ -11,5 +11,3 @@ applications:
     - route:  products.apps.sandbox.cflab01.in.hclcnlabs.com  
    instances: 1
    memory: 750M
-   
-   
