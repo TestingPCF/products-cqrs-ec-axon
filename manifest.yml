@@ -3,7 +3,7 @@ applications:
  - name: products
    path: target/product-0.0.1-SNAPSHOT.jar
    services: 
-     - dbService
+     - productDB
      - redisservice
      - log-drain
      - newrelic
