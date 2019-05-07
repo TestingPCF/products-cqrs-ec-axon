@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -24,7 +23,6 @@ import com.hcl.cloud.product.controller.ProductController;
 @SpringBootApplication
 @PropertySource("classpath:product.properties")
 @PropertySource("classpath:HystrixCommand.properties")
-@EnableDiscoveryClient
 public class ProductApplication {
 
     static Logger log = LoggerFactory.getLogger(ProductController.class);
