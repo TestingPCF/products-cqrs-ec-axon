@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +20,7 @@ import com.hcl.cloud.product.controller.ProductController;
  */
 @EnableHystrix
 @EnableCircuitBreaker
-@SpringBootApplication(exclude = { RedisAutoConfiguration.class })
+@SpringBootApplication
 @PropertySource("classpath:product.properties")
 @PropertySource("classpath:HystrixCommand.properties")
 public class ProductApplication {
