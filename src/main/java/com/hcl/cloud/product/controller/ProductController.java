@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.cloud.product.config.RabbitmqConfigProduct;
+import com.hcl.cloud.product.constants.ProductConstants;
 import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.UpdateProductResponseTranslator;
@@ -49,6 +52,9 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     Environment env;
+    
+    @Autowired
+	private RabbitTemplate rabbitTemplate;
 
     public void setEnv(Environment env) {
         this.env = env;
@@ -81,6 +87,10 @@ public class ProductController {
         try {
 
             createproductReq = productService.createProduct(createproductReq, env, txBean);
+            if(ProductConstants.SUCCESS.equals(createproductReq.getStatus())) {
+            	log.info("Product event is ready to publish for product  "+createproductReq.getProductName());
+            	rabbitTemplate.convertAndSend(RabbitmqConfigProduct.EXCHANGE_NAME,RabbitmqConfigProduct.ROUTING_KEY,createproductReq);
+            }
             createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);
         } catch (Exception ex) {
             throw new ProductException(ex.getMessage());
