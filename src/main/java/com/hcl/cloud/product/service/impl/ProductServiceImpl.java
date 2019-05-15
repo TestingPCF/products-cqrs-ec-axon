@@ -97,11 +97,11 @@ public class ProductServiceImpl implements ProductService {
 
         if (!product.isPresent()) {
 
-            createproductReq = repository.save(createproductReq);
 
             // inventory call for initial product quantity as 0.
             boolean inventoryCallStatus = inventoryCall(createproductReq, env, txBean);
             if (inventoryCallStatus == true) {
+            	createproductReq = repository.save(createproductReq);
                 createproductReq.setStatus(SUCCESS);
             }
         } else {

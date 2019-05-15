@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -18,9 +19,10 @@ import com.hcl.cloud.product.controller.ProductController;
  * @author Brijendra and Kapil
  *
  */
+@SpringBootApplication
 @EnableHystrix
 @EnableCircuitBreaker
-@SpringBootApplication
+@EnableHystrixDashboard
 @PropertySource("classpath:product.properties")
 @PropertySource("classpath:HystrixCommand.properties")
 public class ProductApplication {
