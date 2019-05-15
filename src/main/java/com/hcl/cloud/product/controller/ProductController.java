@@ -164,7 +164,7 @@ public class ProductController {
      * @param skuCode
      * @return ResponseEntity
      * @throws ProductException
-     */
+     *
     @RequestMapping(method = RequestMethod.GET, value = VIEW_PRODUCT_BYSKUCODE_URI, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProductBySkuCode(
             @RequestHeader(value = ACCESS_TOKEN, required = true) String accessToken,
@@ -183,7 +183,7 @@ public class ProductController {
         log.info("viewProductBySkuCode call end");
         return ResponseEntity.ok().body(viewproductRes);
 
-    }
+    } */
 
     /**
      * This method is used for view all active products.
@@ -191,7 +191,7 @@ public class ProductController {
      * @param accessToken
      * @return ResponseEntity
      * @throws ProductException
-     */
+     *
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ViewproductRes> viewProducts(
             @RequestHeader(value = ACCESS_TOKEN, required = true) String accessToken) throws ProductException {
@@ -205,5 +205,5 @@ public class ProductController {
         log.info("viewProducts call end");
         return ResponseEntity.ok().body(viewproductRes);
 
-    }
+    } */
 }

@@ -162,7 +162,7 @@ public class ProductControllerTest {
 		assertEquals("200 OK",response.getStatusCode().toString());
 	}
 	
-	@Test
+	/*@Test
 	public void testViewProductBySkuCode() throws ProductException {
 
 		String skuCode="ABC";
@@ -179,9 +179,9 @@ public class ProductControllerTest {
 		
 		ResponseEntity<ViewproductRes>  response=productController.viewProductBySkuCode("abc", skuCode);
 		assertEquals("200 OK",response.getStatusCode().toString());
-	}
+	}*/
 	
-	@Test(expected=ProductException.class)
+	/*@Test(expected=ProductException.class)
 	public void testViewProductBySkuCodeException() throws ProductException {
 
 		String skuCode="ABC";
@@ -197,10 +197,10 @@ public class ProductControllerTest {
 		when(productService.viewproductbyskuCode(skuCode, env)).thenReturn(pList);
 		
 		productController.viewProductBySkuCode("abc", skuCode);
-	}
+	}*/
 	
 	
-	@Test
+	/*@Test
 	public void testViewProducts() throws ProductException {
 
 		//String skuCode="ABC";
@@ -217,6 +217,6 @@ public class ProductControllerTest {
 		
 		ResponseEntity<ViewproductRes>  response = productController.viewProducts("131333");
 		assertEquals("200 OK",response.getStatusCode().toString());
-	}
+	}*/
 	
 }
