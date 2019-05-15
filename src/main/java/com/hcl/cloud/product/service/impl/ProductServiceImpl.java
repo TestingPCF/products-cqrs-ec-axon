@@ -103,6 +103,7 @@ public class ProductServiceImpl implements ProductService {
             log.info("Inventory Call Status is : "+inventoryCallStatus);
             if (inventoryCallStatus == true) {
             	createproductReq = repository.save(createproductReq);
+            	log.info("Product saved...");
                 createproductReq.setStatus(SUCCESS);
             }
         } else {
