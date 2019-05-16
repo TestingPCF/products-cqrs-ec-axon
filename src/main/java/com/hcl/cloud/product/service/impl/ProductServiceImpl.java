@@ -206,7 +206,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ProductException
      */
     @Override
-    //@HystrixCommand(fallbackMethod = "viewproductbyskuCodeFallback", commandKey = "VIEWPRODUCTBYSKUCODECommand", threadPoolKey = "PRODUCTThreadPool")
+    @HystrixCommand(fallbackMethod = "viewproductbyskuCodeFallback", commandKey = "VIEWPRODUCTBYSKUCODECommand", threadPoolKey = "PRODUCTThreadPool")
     public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
         log.info("View ProductBySkuCode DB call start");
         List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
@@ -239,7 +239,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws ProductException
      */
     @Override
-    //@HystrixCommand(fallbackMethod = "viewProductsFallback", commandKey = "VIEWPRODUCTSCommand", threadPoolKey = "PRODUCTThreadPool")
+    @HystrixCommand(fallbackMethod = "viewProductsFallback", commandKey = "VIEWPRODUCTSCommand", threadPoolKey = "PRODUCTThreadPool")
     public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
         log.info("View Products DB call start");
         List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
