@@ -3,12 +3,11 @@ package com.hcl.cloud.product.service.impl;
 
 import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
 import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
-import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 import static com.hcl.cloud.product.constants.ProductConstants.INVENTORY_URL;
+import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -204,7 +203,7 @@ public class ProductServiceImpl implements ProductService {
      * @param skuCode
      * @return List<CreateproductReq>
      * @throws ProductException
-     */
+     *
     @Override
     @HystrixCommand(fallbackMethod = "viewproductbyskuCodeFallback", commandKey = "VIEWPRODUCTBYSKUCODECommand", threadPoolKey = "PRODUCTThreadPool")
     public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
@@ -229,7 +228,7 @@ public class ProductServiceImpl implements ProductService {
 
         log.info("View ProductBySkuCode DB call end");
         return productList;
-    }
+    } */
 
     /**
      * This method is used for view all active products.
@@ -237,7 +236,7 @@ public class ProductServiceImpl implements ProductService {
      * @param accessToken
      * @return List<CreateproductReq>
      * @throws ProductException
-     */
+     *
     @Override
     @HystrixCommand(fallbackMethod = "viewProductsFallback", commandKey = "VIEWPRODUCTSCommand", threadPoolKey = "PRODUCTThreadPool")
     public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
@@ -249,7 +248,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("View Products DB call end");
 
         return productList;
-    }
+    } */
 
     public boolean inventoryCall(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
             throws ProductException {
@@ -313,6 +312,18 @@ public class ProductServiceImpl implements ProductService {
         log.error("Exception occured during view Products moved to Hystrix fallback");
         throw new ProductException(env.getProperty("viewall.fallback"));
     }
+
+	@Override
+	public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     /*
      * public static void setLog(Logger log) { ProductServiceImpl.log = log; }
