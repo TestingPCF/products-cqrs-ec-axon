@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author BrijendraK
  *
  */
-@ResponseStatus(HttpStatus.NOT_FOUND)
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class ProductException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
