@@ -7,8 +7,8 @@ applications:
      - redisservice
      - worker-mq
      - log-drain
-     - appdynamics
+     - newrelic
    routes:
     - route:  products.apps.sandbox.cflab01.in.hclcnlabs.com  
    instances: 1
-   memory: 750M
+   memory: 1G
