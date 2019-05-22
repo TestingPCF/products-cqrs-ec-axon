@@ -27,7 +27,7 @@ import com.hcl.cloud.product.controller.ProductController;
 @PropertySource("classpath:HystrixCommand.properties")
 public class ProductApplication {
 
-    static Logger log = LoggerFactory.getLogger(ProductController.class);
+    static Logger log = LoggerFactory.getLogger(ProductApplication.class);
 
     /**
      * @param args

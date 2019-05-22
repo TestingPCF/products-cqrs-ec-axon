@@ -3,13 +3,11 @@ package com.hcl.cloud.product.service.impl;
 
 import static com.hcl.cloud.product.constants.ProductConstants.ALREADY;
 import static com.hcl.cloud.product.constants.ProductConstants.FAILED;
-import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 import static com.hcl.cloud.product.constants.ProductConstants.INVENTORY_URL;
+import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -97,13 +95,12 @@ public class ProductServiceImpl implements ProductService {
 
         if (!product.isPresent()) {
 
-
             // inventory call for initial product quantity as 0.
             boolean inventoryCallStatus = inventoryCall(createproductReq, env, txBean);
-            log.info("Inventory Call Status is : "+inventoryCallStatus);
+            log.info("Inventory Call Status is : " + inventoryCallStatus);
             if (inventoryCallStatus == true) {
-            	createproductReq = repository.save(createproductReq);
-            	log.info("Product saved...");
+                createproductReq = repository.save(createproductReq);
+                log.info("Product saved...");
                 createproductReq.setStatus(SUCCESS);
             }
         } else {
@@ -168,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<CreateproductReq> product = repository.findById(updateproductReq.getSkuCode());
 
         if (product.isPresent()) {
-            // product.get().setSkuCode(updateproductReq.getSkuCode());
+
             if (!StringUtils.isEmpty(updateproductReq.getProductName())) {
                 product.get().setProductName(updateproductReq.getProductName());
             }
@@ -195,60 +192,6 @@ public class ProductServiceImpl implements ProductService {
         log.info("Product detail update DB call end");
         return createproductReq;
 
-    }
-
-    /**
-     * This method is used for view single entry of active product based on skuCode.
-     * 
-     * @param accessToken
-     * @param skuCode
-     * @return List<CreateproductReq>
-     * @throws ProductException
-     */
-    @Override
-    @HystrixCommand(fallbackMethod = "viewproductbyskuCodeFallback", commandKey = "VIEWPRODUCTBYSKUCODECommand", threadPoolKey = "PRODUCTThreadPool")
-    public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException {
-        log.info("View ProductBySkuCode DB call start");
-        List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
-        if (null != skuCode) {
-
-            // try to get product from cache
-            CreateproductReq cachedProduct = productCacheManager.getProductFromCache(skuCode);
-            if (cachedProduct != null) {
-                log.info("Found product from cache. Returning !!!!");
-                productList.add(cachedProduct);
-            } else {
-                log.info("Could not found product from cahce. Going to fetch from DB now !!!!");
-                Optional<CreateproductReq> product = repository.findById(skuCode);
-                if (product.isPresent()) {
-                    productList.add(product.get());
-                }
-            }
-
-        }
-
-        log.info("View ProductBySkuCode DB call end");
-        return productList;
-    }
-
-    /**
-     * This method is used for view all active products.
-     * 
-     * @param accessToken
-     * @return List<CreateproductReq>
-     * @throws ProductException
-     */
-    @Override
-    @HystrixCommand(fallbackMethod = "viewProductsFallback", commandKey = "VIEWPRODUCTSCommand", threadPoolKey = "PRODUCTThreadPool")
-    public List<CreateproductReq> viewProducts(Environment env) throws ProductException {
-        log.info("View Products DB call start");
-        List<CreateproductReq> productList = new ArrayList<CreateproductReq>();
-
-        productList = repository.findAll();
-
-        log.info("View Products DB call end");
-
-        return productList;
     }
 
     public boolean inventoryCall(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
@@ -303,18 +246,4 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    public List<CreateproductReq> viewproductbyskuCodeFallback(String skuCode, Environment env)
-            throws ProductException {
-        log.error("Exception occured during view Product moved to Hystrix fallback");
-        throw new ProductException(env.getProperty("viewbycode.fallback"));
-    }
-
-    public List<CreateproductReq> viewProductsFallback(Environment env) throws ProductException {
-        log.error("Exception occured during view Products moved to Hystrix fallback");
-        throw new ProductException(env.getProperty("viewall.fallback"));
-    }
-
-    /*
-     * public static void setLog(Logger log) { ProductServiceImpl.log = log; }
-     */
 }

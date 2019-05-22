@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -22,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.cache.ProductCacheManagerImpl;
 import com.hcl.cloud.product.cache.RedisUtil;
-import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
@@ -44,7 +42,6 @@ public class ProductServiceImplTest {
     RedisUtil<CreateproductReq> redisUtil = new RedisUtil<CreateproductReq>(redisTemplate);
     ProductCacheManagerImpl productCacheManager = new ProductCacheManagerImpl(redisUtil);
     Environment env;
-    //HystrixCommandPropertyResource hystrixCommandProp = new HystrixCommandPropertyResource();
 
     @Test()
     public void testCreateProduct() throws ProductException {
@@ -65,7 +62,7 @@ public class ProductServiceImplTest {
         assertEquals("ABC", createproductReq.getSkuCode());
     }
 
-    @Test(expected= Exception.class) 
+    @Test(expected = Exception.class)
     public void testinventoryCall() throws ProductException {
         CreateproductReq createproductReq = new CreateproductReq();
         createproductReq.setSkuCode("ABC");
@@ -137,7 +134,7 @@ public class ProductServiceImplTest {
         assertEquals("ABC", createproductReq.getSkuCode());
     }
 
-    @Test(expected=Exception.class)
+    @Test(expected = Exception.class)
     public void testUpdateProduct() throws ProductException {
 
         CreateproductReq createproductReq = new CreateproductReq();
@@ -184,113 +181,6 @@ public class ProductServiceImplTest {
         updateproductReq.setSkuCode("ABC");
         createproductReq = productService.updateProduct(updateproductReq, env);
         assertEquals("ABC", createproductReq.getSkuCode());
-    }
-
-    @Test()
-    public void testViewProductByskuCode() throws ProductException {
-
-        CreateproductReq createproductReq = new CreateproductReq();
-        createproductReq.setSkuCode("ABC");
-        createproductReq.setStatus("success");
-        Optional<CreateproductReq> productRequest = Optional.of(createproductReq);
-        TransactionBean txnBean = new TransactionBean();
-        txnBean.setAccessToken("gasfdghsaf");
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        productService.setRepository(repository);
-        when(repository.findById("ABC")).thenReturn(productRequest);
-
-        ProductCacheManager productCacheManager = Mockito.mock(ProductCacheManager.class);
-        productService.setProductCacheManager(productCacheManager);
-        // when(repository.save(createproductReq)).thenReturn(createproductReq);
-        String skuCode = "ABC";
-        List<CreateproductReq> returnList = productService.viewproductbyskuCode(skuCode, env);
-        CreateProductResponseTranslator createProductResponseTranslator = new CreateProductResponseTranslator();
-        createProductResponseTranslator.createproductresponsetranslator(createproductReq, env);
-        assertEquals("ABC", returnList.get(0).getSkuCode());
-    }
-
-    @Test()
-    public void testViewProductByskuCodeForCache() throws ProductException {
-
-        CreateproductReq createproductReq = new CreateproductReq();
-        createproductReq.setSkuCode("ABC");
-        createproductReq.setStatus("success");
-        Optional<CreateproductReq> productRequest = Optional.of(createproductReq);
-        TransactionBean txnBean = new TransactionBean();
-        txnBean.setAccessToken("gasfdghsaf");
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        productService.setRepository(repository);
-        when(repository.findById("ABC")).thenReturn(productRequest);
-        ProductCacheManager productCacheManager = Mockito.mock(ProductCacheManager.class);
-        when(productCacheManager.getProductFromCache("ABC")).thenReturn(createproductReq);
-        productService.setProductCacheManager(productCacheManager);
-        String skuCode = "ABC";
-        List<CreateproductReq> returnList = productService.viewproductbyskuCode(skuCode, env);
-        assertEquals("ABC", returnList.get(0).getSkuCode());
-    }
-
-    @Test(expected = Exception.class)
-    public void testViewProductByskuCodeException() throws ProductException {
-
-        CreateproductReq createproductReq = new CreateproductReq();
-        createproductReq.setSkuCode("ABC");
-        createproductReq.setStatus("success");
-        Optional<CreateproductReq> productRequest = Optional.of(createproductReq);
-        TransactionBean txnBean = new TransactionBean();
-        txnBean.setAccessToken("gasfdghsaf");
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        // productService.setRepository(repository);
-        when(repository.findById("ABC")).thenReturn(productRequest);
-        // when(repository.save(createproductReq)).thenReturn(createproductReq);
-        String skuCode = "ABC";
-        List<CreateproductReq> returnList = productService.viewproductbyskuCode(skuCode, env);
-        assertEquals("ABC", returnList.get(0).getSkuCode());
-    }
-
-    @Test()
-    public void testViewProducts() throws ProductException {
-
-        CreateproductReq createproductReq = new CreateproductReq();
-        createproductReq.setSkuCode("ABC");
-        createproductReq.setStatus("success");
-        List<CreateproductReq> productRequest = new ArrayList<CreateproductReq>();
-        productRequest.add(createproductReq);
-        TransactionBean txnBean = new TransactionBean();
-        txnBean.setAccessToken("gasfdghsaf");
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        productService.setRepository(repository);
-        when(repository.findAll()).thenReturn(productRequest);
-        // when(repository.save(createproductReq)).thenReturn(createproductReq);
-
-        List<CreateproductReq> returnList = productService.viewProducts(env);
-        CreateProductResponseTranslator createProductResponseTranslator = new CreateProductResponseTranslator();
-        createproductReq.setStatus("fail");
-        createProductResponseTranslator.createproductresponsetranslator(createproductReq, env);
-        assertEquals("ABC", returnList.get(0).getSkuCode());
-    }
-
-    @Test(expected = Exception.class)
-    public void testViewProductsException() throws ProductException {
-
-        CreateproductReq createproductReq = new CreateproductReq();
-        createproductReq.setSkuCode("ABC");
-        createproductReq.setStatus("success");
-        List<CreateproductReq> productRequest = new ArrayList<CreateproductReq>();
-        productRequest.add(createproductReq);
-        TransactionBean txnBean = new TransactionBean();
-        txnBean.setAccessToken("gasfdghsaf");
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        // productService.setRepository(repository);
-        when(repository.findAll()).thenReturn(productRequest);
-        // when(repository.save(createproductReq)).thenReturn(createproductReq);
-
-        List<CreateproductReq> returnList = productService.viewProducts(env);
-        assertEquals("ABC", returnList.get(0).getSkuCode());
     }
 
     @Test()
@@ -402,28 +292,6 @@ public class ProductServiceImplTest {
         env = Mockito.mock(Environment.class);
         productService.setRepository(repository);
         productService.updateProductFallback(updateproductReq, env);
-    }
-
-    
-
-    @Test(expected = ProductException.class)
-    public void testviewproductbyskuCodeFallback() throws ProductException {
-
-        String skucode = "ABC";
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        productService.setRepository(repository);
-        productService.viewproductbyskuCodeFallback(skucode, env);
-    }
-
-    @Test(expected = ProductException.class)
-    public void testviewProductsFallback() throws ProductException {
-
-        // String skucode = "ABC";
-        ProductRepository repository = Mockito.mock(ProductRepository.class);
-        env = Mockito.mock(Environment.class);
-        productService.setRepository(repository);
-        productService.viewProductsFallback(env);
     }
 
     @Test

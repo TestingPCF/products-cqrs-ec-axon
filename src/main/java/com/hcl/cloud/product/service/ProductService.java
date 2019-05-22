@@ -1,7 +1,5 @@
 package com.hcl.cloud.product.service;
 
-import java.util.List;
-
 import org.springframework.core.env.Environment;
 
 import com.hcl.cloud.product.exception.ProductException;
@@ -12,8 +10,7 @@ import com.hcl.cloud.product.resources.TransactionBean;
 
 /**
  * 
- * @author Brijendra and Kapil
- * Interface for ProductService
+ * @author Brijendra and Kapil Interface for ProductService
  *
  */
 public interface ProductService {
@@ -26,7 +23,8 @@ public interface ProductService {
      * @return CreateproductReq
      * @throws ProductException
      */
-    public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean) throws ProductException;
+    public CreateproductReq createProduct(CreateproductReq createproductReq, Environment env, TransactionBean txBean)
+            throws ProductException;
 
     /**
      * This method implementation works for delete product.
@@ -49,26 +47,5 @@ public interface ProductService {
      */
 
     public CreateproductReq updateProduct(UpdateproductReq updateproductReq, Environment env) throws ProductException;
-
-    /**
-     * This method implementation works for view active product based on skucode.
-     * 
-     * @param skuCode
-     * @param env
-     * @return
-     * @throws ProductException
-     */
-
-    public List<CreateproductReq> viewproductbyskuCode(String skuCode, Environment env) throws ProductException;
-
-    /**
-     * This method implementation works for view all active products.
-     * 
-     * @param env
-     * @return
-     * @throws ProductException
-     */
-
-    public List<CreateproductReq> viewProducts(Environment env) throws ProductException;
 
 }
