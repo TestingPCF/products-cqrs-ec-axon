@@ -77,7 +77,7 @@ public class ProductController {
 
             createproductReq = productService.createProduct(createproductReq, env, txBean);
             if (ProductConstants.SUCCESS.equals(createproductReq.getStatus())) {
-                log.info("Product event is ready to publish for product  " + createproductReq.getProductName());
+                log.info("Product event is ready to publish for product:" + createproductReq.getProductName());
                 rabbitTemplate.convertAndSend(RabbitmqConfigProduct.EXCHANGE_NAME, RabbitmqConfigProduct.ROUTING_KEY,
                         createproductReq);
             }

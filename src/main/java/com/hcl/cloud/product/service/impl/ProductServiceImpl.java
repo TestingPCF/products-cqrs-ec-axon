@@ -229,9 +229,9 @@ public class ProductServiceImpl implements ProductService {
         ResponseEntity<InventoryQuantityRes> responseEntity = inventoryServiceClient.createInventory(inventory);
         log.info("Inventory service called using feing clinet service registry");
         if (responseEntity != null) {
-            log.info("Product created successfully putting into cache");
             // If product created successfully put it in cache for future use
             productCacheManager.cacheProductDetails(createproductReq);
+            log.info("Product created successfully putting into cache");
             return true;
         }
         return false;
