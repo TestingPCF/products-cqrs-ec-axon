@@ -8,6 +8,7 @@ applications:
      - worker-mq
      - log-drain
      - newrelic
+     - cloud-service-registry
    routes:
     - route:  products.apps.sandbox.cflab01.in.hclcnlabs.com  
    instances: 1

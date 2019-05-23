@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.hcl.cloud.product.cache.ProductCacheManager;
+import com.hcl.cloud.product.client.InventoryServiceClient;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
@@ -47,10 +48,21 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Autowired
+    private InventoryServiceClient inventoryServiceClient;
+
     public void setRepository(ProductRepository repository) {
         this.repository = repository;
     }
-
+    
+    /**
+     * autowiring InventoryServiceClient.
+     * @param client InventoryServiceClient
+     */
+    @Autowired
+    public void setInventoryServiceClient(InventoryServiceClient client) {
+        this.inventoryServiceClient = client;
+    }
     private ProductCacheManager productCacheManager;
 
     /**
@@ -211,8 +223,11 @@ public class ProductServiceImpl implements ProductService {
         inventory.setSkuCode(createproductReq.getSkuCode());
         inventory.setQuantity(0);
         HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
-        ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
-                InventoryQuantityRes.class);
+        /*ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
+                InventoryQuantityRes.class);*/
+        log.info("calling inventory service using feing clinet service registry...");
+        ResponseEntity<InventoryQuantityRes> responseEntity = inventoryServiceClient.createInventory(inventory);
+        log.info("Inventory service called using feing clinet service registry");
         if (responseEntity != null) {
             log.info("Product created successfully putting into cache");
             // If product created successfully put it in cache for future use
