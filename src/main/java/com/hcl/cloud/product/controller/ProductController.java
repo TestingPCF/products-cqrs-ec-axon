@@ -4,6 +4,7 @@ import static com.hcl.cloud.product.constants.ProductConstants.ACCESS_TOKEN;
 
 import javax.validation.Valid;
 
+import com.hcl.cloud.product.config.ConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -41,6 +42,9 @@ import com.hcl.cloud.product.service.ProductService;
 @RefreshScope
 @RestController
 public class ProductController {
+
+    @Autowired
+    private ConfigLoader configLoader;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -84,7 +88,8 @@ public class ProductController {
             createproductReq = productService.createProduct(createproductReq, env, txBean);
             if (ProductConstants.SUCCESS.equals(createproductReq.getStatus())) {
                 log.info("Product event is ready to publish for product:" + createproductReq.getProductName());
-                rabbitTemplate.convertAndSend(RabbitmqConfigProduct.EXCHANGE_NAME, RabbitmqConfigProduct.ROUTING_KEY,
+                rabbitTemplate.convertAndSend(configLoader.getExchangeName(),
+                        configLoader.getRoutingKey(),
                         createproductReq);
             }
             createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);

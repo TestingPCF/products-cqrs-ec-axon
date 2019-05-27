@@ -12,6 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConversionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,26 +21,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class RabbitmqConfigProduct {
-	public static final String EXCHANGE_NAME = "productMQ";
-	
-	public static final String ROUTING_KEY = "productPOC";
-	
-	public static final String QUEUE_SPECIFIC_NAME = "productQueue";
 
-	
+    @Autowired
+    private ConfigLoader configLoader;
+
 	@Bean
 	public TopicExchange mqExchange() {
-		return new TopicExchange(EXCHANGE_NAME);
+		return new TopicExchange(configLoader.getExchangeName());
 	}
 
 	@Bean
 	public Queue appQueueSpecific() {
-		return new Queue(QUEUE_SPECIFIC_NAME);
+		return new Queue(configLoader.getQueueSpecificName());
 	}
 
 	@Bean
 	public Binding declareBindingSpecific() {
-		return BindingBuilder.bind(appQueueSpecific()).to(mqExchange()).with(ROUTING_KEY);
+		return BindingBuilder.bind(appQueueSpecific()).to(mqExchange())
+                .with(configLoader.getRoutingKey());
 	}
 
 	@Bean

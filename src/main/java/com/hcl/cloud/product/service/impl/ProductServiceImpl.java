@@ -207,6 +207,9 @@ public class ProductServiceImpl implements ProductService {
         HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
         ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
                 InventoryQuantityRes.class);
+        if(responseEntity != null) {
+            return true;
+        }
         log.info("calling inventory service using feing clinet service registry...");
         //ResponseEntity<InventoryQuantityRes> responseEntity = inventoryServiceClient.createInventory(inventory);
         log.info("Inventory service called using feing clinet service registry");
