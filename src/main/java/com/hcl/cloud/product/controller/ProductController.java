@@ -4,7 +4,6 @@ import static com.hcl.cloud.product.constants.ProductConstants.ACCESS_TOKEN;
 
 import javax.validation.Valid;
 
-import com.hcl.cloud.product.config.ConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,14 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;     
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hcl.cloud.product.config.RabbitmqConfigProduct;
+import com.hcl.cloud.product.config.ConfigLoader;
 import com.hcl.cloud.product.constants.ProductConstants;
 import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;

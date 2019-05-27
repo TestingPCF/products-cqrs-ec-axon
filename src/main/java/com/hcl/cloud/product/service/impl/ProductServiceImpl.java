@@ -47,8 +47,8 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository repository;
 
-    /*@Autowired
-    private InventoryServiceClient inventoryServiceClient;*/
+    @Autowired
+    private InventoryServiceClient inventoryServiceClient;
 
     public void setRepository(ProductRepository repository) {
         this.repository = repository;
@@ -58,10 +58,10 @@ public class ProductServiceImpl implements ProductService {
      * autowiring InventoryServiceClient.
      * @param client InventoryServiceClient
      */
-    /*@Autowired
+    @Autowired
     public void setInventoryServiceClient(InventoryServiceClient client) {
         this.inventoryServiceClient = client;
-    }*/
+    }
     
 
     ProductServiceImpl() {
@@ -205,15 +205,14 @@ public class ProductServiceImpl implements ProductService {
         inventory.setSkuCode(createproductReq.getSkuCode());
         inventory.setQuantity(0);
         HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
-        ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
-                InventoryQuantityRes.class);
+        /*ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
+                InventoryQuantityRes.class);*/
+        log.info("calling inventory service using feing clinet service registry...");
+        ResponseEntity<InventoryQuantityRes> responseEntity = inventoryServiceClient.createInventory(inventory);
+        log.info("Inventory service called using feing clinet service registry");
         if(responseEntity != null) {
             return true;
         }
-        log.info("calling inventory service using feing clinet service registry...");
-        //ResponseEntity<InventoryQuantityRes> responseEntity = inventoryServiceClient.createInventory(inventory);
-        log.info("Inventory service called using feing clinet service registry");
-        
         return false;
     }
 
