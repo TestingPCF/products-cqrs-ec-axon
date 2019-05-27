@@ -11,16 +11,12 @@ import java.util.Optional;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.hcl.cloud.product.cache.ProductCacheManager;
-import com.hcl.cloud.product.cache.ProductCacheManagerImpl;
-import com.hcl.cloud.product.cache.RedisUtil;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
@@ -38,9 +34,6 @@ import com.hcl.cloud.product.response.ViewproductRes;
 public class ProductServiceImplTest {
 
     ProductServiceImpl productService = new ProductServiceImpl();
-    RedisTemplate<String, CreateproductReq> redisTemplate = new RedisTemplate();
-    RedisUtil<CreateproductReq> redisUtil = new RedisUtil<CreateproductReq>(redisTemplate);
-    ProductCacheManagerImpl productCacheManager = new ProductCacheManagerImpl(redisUtil);
     Environment env;
 
     @Test()
@@ -87,16 +80,9 @@ public class ProductServiceImplTest {
         HttpEntity<InventoryQuantityReq> requestEntity = new HttpEntity<>(inventory, requestHeaders);
         ResponseEntity<InventoryQuantityRes> responseEntity = restTemplate.postForEntity(uri, requestEntity,
                 InventoryQuantityRes.class);
-        if (responseEntity != null) {
-
-            // If product created successfully put it in cache for future use
-            productCacheManager.cacheProductDetails(createproductReq);
-
-        }
-
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testCreateProductCase2() throws ProductException {
 
         CreateproductReq createproductReq = new CreateproductReq();
@@ -112,7 +98,6 @@ public class ProductServiceImplTest {
         when(repository.findById("ABC")).thenReturn(productRequest);
         when(repository.save(createproductReq)).thenReturn(createproductReq);
         createproductReq = productService.createProduct(createproductReq, env, txnBean);
-        // assertEquals("ABC", createproductReq.getSkuCode());
     }
 
     @Test(expected = Exception.class)
@@ -134,7 +119,7 @@ public class ProductServiceImplTest {
         assertEquals("ABC", createproductReq.getSkuCode());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testUpdateProduct() throws ProductException {
 
         CreateproductReq createproductReq = new CreateproductReq();
@@ -241,8 +226,6 @@ public class ProductServiceImplTest {
         productService.setRepository(repository);
         when(repository.findById("ABC")).thenReturn(productRequest);
         when(repository.save(createproductReq)).thenReturn(createproductReq);
-        ProductCacheManager productCacheManager = Mockito.mock(ProductCacheManager.class);
-        productService.setProductCacheManager(productCacheManager);
         DeleteproductReq deleteproductReq = new DeleteproductReq();
         deleteproductReq.setSkuCode("ABC");
         CreateproductReq response = productService.deleteProduct(deleteproductReq, env);

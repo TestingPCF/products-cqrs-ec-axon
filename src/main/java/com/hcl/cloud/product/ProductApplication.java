@@ -9,8 +9,7 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
+
 
 /**
  * 
@@ -23,8 +22,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 @EnableHystrixDashboard
 @PropertySource("classpath:product.properties")
 @PropertySource("classpath:HystrixCommand.properties")
-//@EnableDiscoveryClient
-//@EnableFeignClients
 public class ProductApplication {
 
     static Logger log = LoggerFactory.getLogger(ProductApplication.class);
@@ -35,24 +32,6 @@ public class ProductApplication {
      */
     public static void main(String[] args) {
         SpringApplication.run(ProductApplication.class, args);
-    }
-
-    /**
-     * @return JedisConnectionFactory
-     */
-    @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
-        return new JedisConnectionFactory();
-    }
-
-    /**
-     * @return RedisTemplate
-     */
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(jedisConnectionFactory());
-        return template;
     }
 
 }

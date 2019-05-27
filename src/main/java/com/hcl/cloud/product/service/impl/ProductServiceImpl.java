@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.hcl.cloud.product.cache.ProductCacheManager;
 import com.hcl.cloud.product.client.InventoryServiceClient;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
@@ -63,25 +62,11 @@ public class ProductServiceImpl implements ProductService {
     public void setInventoryServiceClient(InventoryServiceClient client) {
         this.inventoryServiceClient = client;
     }*/
-    private ProductCacheManager productCacheManager;
-
-    /**
-     * @param productCacheManager to set
-     */
-    public void setProductCacheManager(ProductCacheManager productCacheManager) {
-        this.productCacheManager = productCacheManager;
-    }
+    
 
     ProductServiceImpl() {
     }
 
-    /**
-     * @param productCacheManager
-     */
-    @Autowired
-    public ProductServiceImpl(ProductCacheManager productCacheManager) {
-        this.productCacheManager = productCacheManager;
-    }
 
     @Autowired
     HystrixCommandPropertyResource hystrixCommandProp;
@@ -145,8 +130,6 @@ public class ProductServiceImpl implements ProductService {
                 product.get().setIs_deleted(true);
                 createproductReq = repository.save(product.get());
                 createproductReq.setStatus(SUCCESS);
-                // After successful deletion of product remove it from cache
-                productCacheManager.removeProductFromCache(createproductReq);
             } else {
                 createproductReq.setStatus(ALREADY);
             }
@@ -195,7 +178,6 @@ public class ProductServiceImpl implements ProductService {
             }
             product.get().setIs_deleted(updateproductReq.isIs_deleted());
             createproductReq = repository.save(product.get());
-            productCacheManager.cacheProductDetails(createproductReq);
             createproductReq.setStatus(SUCCESS);
         } else {
             createproductReq.setStatus(ALREADY);
@@ -228,12 +210,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("calling inventory service using feing clinet service registry...");
         //ResponseEntity<InventoryQuantityRes> responseEntity = inventoryServiceClient.createInventory(inventory);
         log.info("Inventory service called using feing clinet service registry");
-        if (responseEntity != null) {
-            // If product created successfully put it in cache for future use
-            productCacheManager.cacheProductDetails(createproductReq);
-            log.info("Product created successfully putting into cache");
-            return true;
-        }
+        
         return false;
     }
 

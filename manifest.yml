@@ -4,10 +4,10 @@ applications:
    path: target/product-0.0.1-SNAPSHOT.jar
    services: 
      - productDB
-     - redisservice
      - worker-mq
      - log-drain
      - newrelic
+     - cloud-config-server
    routes:
     - route:  products.apps.sandbox.cflab01.in.hclcnlabs.com  
    instances: 1

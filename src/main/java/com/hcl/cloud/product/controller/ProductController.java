@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;     
@@ -36,6 +38,7 @@ import com.hcl.cloud.product.service.ProductService;
  * 
  * @author Brijendra and Kapil ProductController
  */
+@RefreshScope
 @RestController
 public class ProductController {
     @Autowired
@@ -45,6 +48,9 @@ public class ProductController {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Value("${product.create.log}")
+    private String createProductLog;
 
     public void setEnv(Environment env) {
         this.env = env;
@@ -68,7 +74,7 @@ public class ProductController {
     public ResponseEntity<CreateproductRes> createProduct(@RequestHeader(value = ACCESS_TOKEN) String accessToken,
             @Valid @RequestBody CreateproductReq createproductReq) throws ProductException {
 
-        log.info("createProduct call start");
+        log.info(createProductLog);
         CreateproductRes createproductRes = null;
         CreateProductResponseTranslator cprtrans = new CreateProductResponseTranslator();
         TransactionBean txBean = new TransactionBean();
