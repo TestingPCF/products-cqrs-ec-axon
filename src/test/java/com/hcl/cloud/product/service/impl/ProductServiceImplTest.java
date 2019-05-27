@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.hcl.cloud.product.client.InventoryServiceClient;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
@@ -84,7 +85,8 @@ public class ProductServiceImplTest {
 
     @Test
     public void testCreateProductCase2() throws ProductException {
-
+    	
+    	InventoryServiceClient inventoryServiceClient = Mockito.mock(InventoryServiceClient.class);
         CreateproductReq createproductReq = new CreateproductReq();
         createproductReq.setSkuCode("ABC");
         createproductReq.setStatus("success");
@@ -93,8 +95,14 @@ public class ProductServiceImplTest {
         txnBean.setAccessToken("gasfdghsaf");
 
         ProductRepository repository = Mockito.mock(ProductRepository.class);
+        
         env = Mockito.mock(Environment.class);
+        InventoryQuantityReq inventory = new InventoryQuantityReq();
+        inventory.setSkuCode(createproductReq.getSkuCode());
+        inventory.setQuantity(0);
+        
         productService.setRepository(repository);
+        productService.setInventoryServiceClient(inventoryServiceClient);
         when(repository.findById("ABC")).thenReturn(productRequest);
         when(repository.save(createproductReq)).thenReturn(createproductReq);
         createproductReq = productService.createProduct(createproductReq, env, txnBean);

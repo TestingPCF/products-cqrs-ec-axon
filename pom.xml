@@ -20,7 +20,6 @@
 		<!--<spring-cloud-services.version>2.0.3.RELEASE</spring-cloud-services.version>-->
 		<spring-cloud-services.version>2.1.1.RELEASE</spring-cloud-services.version>
 		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
-		<maven.test.skip>true</maven.test.skip>
 	</properties>
 
 	<dependencies>
