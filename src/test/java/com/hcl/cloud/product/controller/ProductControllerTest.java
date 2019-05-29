@@ -65,7 +65,7 @@ public class ProductControllerTest {
         productController.createProduct("ABC", createproductReq);
     }
 
-    //@Test
+    @Test(expected = Exception.class)
     public void testDeleteProduct() throws ProductException {
 
         CreateproductReq createproductReq = new CreateproductReq(); //
@@ -101,14 +101,12 @@ public class ProductControllerTest {
         assertEquals("ABC", deleteproductReq.getSkuCode());
     }
 
-    //@Test
+    @Test(expected = Exception.class)
     public void testUpdateProduct() throws ProductException {
 
         UpdateproductReq updateproductReq = new UpdateproductReq();
         updateproductReq.setSkuCode("ABC");
         updateproductReq.setProductName("updated");
-        DeleteproductReq deleteproductReq = new DeleteproductReq();
-        deleteproductReq.setSkuCode("ABC");
         ProductService productService = Mockito.mock(ProductServiceImpl.class);
         env = Mockito.mock(Environment.class);
         productController.setEnv(env);
@@ -116,9 +114,10 @@ public class ProductControllerTest {
 
         CreateproductReq createproductReq = new CreateproductReq();
         createproductReq.setSkuCode("ABC");
+        createproductReq.setStatus("success");
         when(productService.updateProduct(updateproductReq, env)).thenReturn(createproductReq);
-        ResponseEntity<UpdateproductRes> response = productController.updateProduct("abcd", updateproductReq);
-        assertEquals("200 OK", response.getStatusCode().toString());
+        productController.updateProduct("abcd", updateproductReq);
+        assertEquals("200 OK", updateproductReq.getSkuCode());
     }
 
     @Test(expected = ProductException.class)
@@ -141,7 +140,7 @@ public class ProductControllerTest {
         assertEquals("200 OK", response.getStatusCode().toString());
     }
 
-    //@Test
+    @Test(expected = Exception.class)
     public void testUpdateProductStatusCode() throws ProductException {
 
         UpdateproductReq updateproductReq = new UpdateproductReq();
