@@ -1,7 +1,9 @@
 package com.hcl.cloud.product.datatranslator;
 
+import com.hcl.cloud.product.config.ConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -17,6 +19,9 @@ import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 public class UpdateProductResponseTranslator {
     static Logger log = LoggerFactory.getLogger(UpdateProductResponseTranslator.class);
 
+    @Autowired
+    private ConfigLoader configLoader;
+
     /**
      * This method is used as translator from backend to frontend.
      * 
@@ -28,10 +33,10 @@ public class UpdateProductResponseTranslator {
         log.info("Response translation from backend to frontend start");
         UpdateproductRes updateproductRes = new UpdateproductRes();
         if (!StringUtils.isEmpty(creReq.getStatus()) && creReq.getStatus().equals(SUCCESS)) {
-            updateproductRes.setStatus(env.getProperty("product.update.successmsg"));
+            updateproductRes.setStatus(configLoader.getProductUpdateSuccessMsg());
             updateproductRes.setStatusCode(String.valueOf(HttpStatus.OK.value()));
         } else {
-            updateproductRes.setStatus(env.getProperty("product.notexistmsg"));
+            updateproductRes.setStatus(configLoader.getProductNotExistMsg());
             updateproductRes.setStatusCode(String.valueOf(HttpStatus.NO_CONTENT.value()));
         }
         log.info("Response translation from backend to frontend end");

@@ -8,8 +8,15 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -32,10 +39,22 @@ import com.hcl.cloud.product.response.InventoryQuantityRes;
 import com.hcl.cloud.product.response.UpdateproductRes;
 import com.hcl.cloud.product.response.ViewproductRes;
 
+@RunWith(PowerMockRunner.class)
 public class ProductServiceImplTest {
 
-    ProductServiceImpl productService = new ProductServiceImpl();
+    @Mock
+    private DeleteProductResponseTranslator deleteProductResponseTranslator;
+
+    @InjectMocks
+    private ProductServiceImpl productService;
+
     Environment env;
+
+    @Before
+    public void setUp() throws Exception {
+        this.productService = PowerMockito.spy(new ProductServiceImpl());
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test()
     public void testCreateProduct() throws ProductException {
@@ -292,7 +311,7 @@ public class ProductServiceImplTest {
         createproductReq.setSkuCode("ABC");
         env = Mockito.mock(Environment.class);
         createproductReq.setStatus("already");
-        DeleteProductResponseTranslator deleteProductResponseTranslator = new DeleteProductResponseTranslator();
+//        DeleteProductResponseTranslator deleteProductResponseTranslator = new DeleteProductResponseTranslator();
         deleteProductResponseTranslator.deleteproductresponseTranslator(createproductReq, env);
     }
 
@@ -303,7 +322,6 @@ public class ProductServiceImplTest {
         createproductReq.setSkuCode("ABC");
         env = Mockito.mock(Environment.class);
         createproductReq.setStatus("change");
-        DeleteProductResponseTranslator deleteProductResponseTranslator = new DeleteProductResponseTranslator();
         deleteProductResponseTranslator.deleteproductresponseTranslator(createproductReq, env);
     }
 
