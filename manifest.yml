@@ -1,15 +1,17 @@
 --- 
 applications:
- - name: products
-   path: target/product-0.0.1-SNAPSHOT.jar
+ - name: productsCmdCQRS
+   path: target/productsCmdCQRS.jar
    services: 
-     - productDB
+     - productCmdDB
      - worker-mq
      - log-drain
      - newrelic
      - cloud-config-server
      - cloud-service-registry
-   routes:
-    - route:  products.apps.sandbox.cflab01.in.hclcnlabs.com  
+#   routes:
+#    - route:  productsCMD.apps.sandbox.cflab01.in.hclcnlabs.com  
    instances: 1
    memory: 1G
+   env:
+     JBP_CONFIG_DEBUG: '{enabled: true}'

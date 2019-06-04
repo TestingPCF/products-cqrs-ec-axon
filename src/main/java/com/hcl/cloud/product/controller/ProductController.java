@@ -2,6 +2,8 @@ package com.hcl.cloud.product.controller;
 
 import static com.hcl.cloud.product.constants.ProductConstants.ACCESS_TOKEN;
 
+import java.util.concurrent.CompletableFuture;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -13,26 +15,26 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hcl.cloud.product.command.AddProductToCatalogCommand;
 import com.hcl.cloud.product.config.ConfigLoader;
-import com.hcl.cloud.product.constants.ProductConstants;
-import com.hcl.cloud.product.datatranslator.CreateProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.DeleteProductResponseTranslator;
 import com.hcl.cloud.product.datatranslator.UpdateProductResponseTranslator;
 import com.hcl.cloud.product.exception.ProductException;
+import com.hcl.cloud.product.repository.ProductRepository;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
 import com.hcl.cloud.product.request.UpdateproductReq;
-import com.hcl.cloud.product.resources.TransactionBean;
-import com.hcl.cloud.product.response.CreateproductRes;
 import com.hcl.cloud.product.response.DeleteproductRes;
 import com.hcl.cloud.product.response.UpdateproductRes;
 import com.hcl.cloud.product.service.ProductService;
+
 
 /**
  * 
@@ -46,6 +48,10 @@ public class ProductController {
     private ConfigLoader configLoader;
     @Autowired
     private ProductService productService;
+    
+    @Autowired
+    private ProductRepository productRepository;
+    
     @Autowired
     Environment env;
 
@@ -65,40 +71,40 @@ public class ProductController {
 
     static Logger log = LoggerFactory.getLogger(ProductController.class);
 
-    /**
-     * This method is used for create the product.
-     * 
-     * @param accessToken
-     * @param createproductReq
-     * @return ResponseEntity
-     * @throws ProductException
-     */
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreateproductRes> createProduct(@RequestHeader(value = ACCESS_TOKEN) String accessToken,
-            @Valid @RequestBody CreateproductReq createproductReq) throws ProductException {
-
-        log.info(createProductLog);
-        CreateproductRes createproductRes = null;
-        CreateProductResponseTranslator cprtrans = new CreateProductResponseTranslator();
-        TransactionBean txBean = new TransactionBean();
-        txBean.setAccessToken(accessToken);
-        try {
-
-            createproductReq = productService.createProduct(createproductReq, env, txBean);
-            if (ProductConstants.SUCCESS.equals(createproductReq.getStatus())) {
-                log.debug("Product event is ready to publish for product:" + createproductReq.getProductName());
-                rabbitTemplate.convertAndSend(configLoader.getExchangeName(),
-                        configLoader.getRoutingKey(),
-                        createproductReq);
-            }
-            createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);
-        } catch (Exception ex) {
-            throw new ProductException(ex.getMessage());
-        }
-
-        log.info("createProduct call end");
-        return ResponseEntity.ok().body(createproductRes);
-    }
+//    /**
+//     * This method is used for create the product.
+//     * 
+//     * @param accessToken
+//     * @param createproductReq
+//     * @return ResponseEntity
+//     * @throws ProductException
+//     */
+//    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<CreateproductRes> createProduct(@RequestHeader(value = ACCESS_TOKEN) String accessToken,
+//            @Valid @RequestBody CreateproductReq createproductReq) throws ProductException {
+//
+//        log.info(createProductLog);
+//        CreateproductRes createproductRes = null;
+//        CreateProductResponseTranslator cprtrans = new CreateProductResponseTranslator();
+//        TransactionBean txBean = new TransactionBean();
+//        txBean.setAccessToken(accessToken);
+//        try {
+//
+//            createproductReq = productService.createProduct(createproductReq, env, txBean);
+//            if (ProductConstants.SUCCESS.equals(createproductReq.getStatus())) {
+//                log.debug("Product event is ready to publish for product:" + createproductReq.getProductName());
+//                rabbitTemplate.convertAndSend(configLoader.getExchangeName(),
+//                        configLoader.getRoutingKey(),
+//                        createproductReq);
+//            }
+//            createproductRes = cprtrans.createproductresponsetranslator(createproductReq, env);
+//        } catch (Exception ex) {
+//            throw new ProductException(ex.getMessage());
+//        }
+//
+//        log.info("createProduct call end");
+//        return ResponseEntity.ok().body(createproductRes);
+//    }
 
     /**
      * This method is used for soft delete product.
@@ -154,5 +160,22 @@ public class ProductController {
         return ResponseEntity.ok().body(updateproductRes);
 
     }
+    
+    @PostMapping("/add")
+	public CompletableFuture<String> addProductToCatalog(@RequestBody CreateproductReq request) {
+
+    	AddProductToCatalogCommand command = new AddProductToCatalogCommand(request.getSkuCode(), request.getProductName(),request.getSalePrice(), request.getListPrice(),request.getProductDescrition(), request.getCategory(),request.isIs_deleted(),request.getStatus());
+		log.info("Executing command: {}", command);
+		return productService.addProductToCatalog(command);
+	}
+
+	public ProductController(ProductService productService, ProductRepository productRepository, Environment env,
+			RabbitTemplate rabbitTemplate) {
+		super();
+		this.productService = productService;
+		this.productRepository = productRepository;
+		this.env = env;
+		this.rabbitTemplate = rabbitTemplate;
+	}
 
 }

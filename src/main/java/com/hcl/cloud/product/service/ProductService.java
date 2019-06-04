@@ -1,7 +1,10 @@
 package com.hcl.cloud.product.service;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.core.env.Environment;
 
+import com.hcl.cloud.product.command.AddProductToCatalogCommand;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.request.CreateproductReq;
 import com.hcl.cloud.product.request.DeleteproductReq;
@@ -47,5 +50,7 @@ public interface ProductService {
      */
 
     public CreateproductReq updateProduct(UpdateproductReq updateproductReq, Environment env) throws ProductException;
+    
+    public CompletableFuture<String> addProductToCatalog(AddProductToCatalogCommand command);
 
 }

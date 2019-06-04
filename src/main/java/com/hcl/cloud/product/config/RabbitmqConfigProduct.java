@@ -1,4 +1,4 @@
-package com.hcl.cloud.product.config;
+/*package com.hcl.cloud.product.config;
 
 import java.util.Map;
 
@@ -70,3 +70,4 @@ public class RabbitmqConfigProduct {
         }
     }
 }
+*/

@@ -141,4 +141,21 @@ public class CreateproductReq  implements Serializable{
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
+	public CreateproductReq(@NotNull String skuCode, @NotNull String productName, @Min(1) @NotNull Integer salePrice,
+			@Min(1) @NotNull Integer listPrice, @NotNull String productDescrition, @NotNull String category,
+			boolean is_deleted, String status) {
+		super();
+		this.skuCode = skuCode;
+		this.productName = productName;
+		this.salePrice = salePrice;
+		this.listPrice = listPrice;
+		this.productDescrition = productDescrition;
+		this.category = category;
+		this.is_deleted = is_deleted;
+		this.status = status;
+	}
+	public CreateproductReq() {
+		super();
+	}
+    
 }

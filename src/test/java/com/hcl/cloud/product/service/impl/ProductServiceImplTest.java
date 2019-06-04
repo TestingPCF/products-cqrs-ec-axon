@@ -1,4 +1,4 @@
-package com.hcl.cloud.product.service.impl;
+/*package com.hcl.cloud.product.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -410,3 +410,4 @@ public class ProductServiceImplTest {
     }
 
 }
+*/

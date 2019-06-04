@@ -9,7 +9,9 @@ import static com.hcl.cloud.product.constants.ProductConstants.SUCCESS;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.hcl.cloud.product.client.InventoryServiceClient;
+import com.hcl.cloud.product.command.AddProductToCatalogCommand;
 import com.hcl.cloud.product.controller.ProductController;
 import com.hcl.cloud.product.exception.ProductException;
 import com.hcl.cloud.product.repository.ProductRepository;
@@ -35,6 +38,7 @@ import com.hcl.cloud.product.resources.TransactionBean;
 import com.hcl.cloud.product.response.InventoryQuantityRes;
 import com.hcl.cloud.product.service.ProductService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 
 /**
  * 
@@ -50,6 +54,15 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private InventoryServiceClient inventoryServiceClient;
 
+    @Autowired
+    private final CommandGateway commandGateway;
+
+//    ProductServiceImpl(){}
+    public ProductServiceImpl(CommandGateway commandGateway) {
+        this.commandGateway = commandGateway;
+    }
+
+    
     public void setRepository(ProductRepository repository) {
         this.repository = repository;
     }
@@ -61,10 +74,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     public void setInventoryServiceClient(InventoryServiceClient client) {
         this.inventoryServiceClient = client;
-    }
-    
-
-    ProductServiceImpl() {
     }
 
 
@@ -238,6 +247,11 @@ public class ProductServiceImpl implements ProductService {
         log.error("Exception occured during update Product moved to Hystrix fallback");
         throw new ProductException(env.getProperty("update.fallback."));
 
+    }
+    
+    public CompletableFuture<String> addProductToCatalog(AddProductToCatalogCommand command) {
+        log.info("Processing AddProductToCatalogCommand command: {}", command);
+        return this.commandGateway.send(command);
     }
 
 }

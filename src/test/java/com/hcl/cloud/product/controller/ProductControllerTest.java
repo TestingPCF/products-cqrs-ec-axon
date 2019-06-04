@@ -1,4 +1,4 @@
-
+/*
 package com.hcl.cloud.product.controller;
 
 import static org.junit.Assert.assertEquals;
@@ -19,11 +19,11 @@ import com.hcl.cloud.product.response.UpdateproductRes;
 import com.hcl.cloud.product.service.ProductService;
 import com.hcl.cloud.product.service.impl.ProductServiceImpl;
 
-/**
+*//**
  * 
  * @author BrijendraK
  *
- */
+ *//*
 public class ProductControllerTest {
 
     ProductController productController = new ProductController();
@@ -162,3 +162,4 @@ public class ProductControllerTest {
     }
 
 }
+*/
